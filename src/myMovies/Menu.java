@@ -49,6 +49,14 @@ public class Menu extends javax.swing.JFrame {
         topPanel = new javax.swing.JPanel();
         HeaderPanel = new javax.swing.JPanel();
         headerLabel = new javax.swing.JLabel();
+        cardPanel = new javax.swing.JPanel();
+        getDataTabPanel = new javax.swing.JPanel();
+        favouriteTabPanel = new javax.swing.JPanel();
+        searchTabPanel = new javax.swing.JPanel();
+        statsTabPanel = new javax.swing.JPanel();
+        aboutTabPanel = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTextArea1 = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(108, 88, 141));
@@ -70,6 +78,9 @@ public class Menu extends javax.swing.JFrame {
         getLabel.setText("Ανάκτηση & Αποθήκευση");
         getLabel.setToolTipText(null);
         getLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                getLabelMouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 getLabelMouseEntered(evt);
             }
@@ -104,6 +115,9 @@ public class Menu extends javax.swing.JFrame {
         favLabel.setText("Λίστες Αγαπημένων");
         favLabel.setToolTipText(null);
         favLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                favLabelMouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 favLabelMouseEntered(evt);
             }
@@ -137,6 +151,9 @@ public class Menu extends javax.swing.JFrame {
         searchLabel.setText("Αναζήτηση ταινιών");
         searchLabel.setToolTipText(null);
         searchLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                searchLabelMouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 searchLabelMouseEntered(evt);
             }
@@ -170,6 +187,9 @@ public class Menu extends javax.swing.JFrame {
         statsLabel.setText("Στατιστικά");
         statsLabel.setToolTipText(null);
         statsLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                statsLabelMouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 statsLabelMouseEntered(evt);
             }
@@ -281,7 +301,7 @@ public class Menu extends javax.swing.JFrame {
 
         HeaderPanel.setBackground(new java.awt.Color(54, 33, 89));
 
-        headerLabel.setFont(new java.awt.Font("Georgia", 0, 24)); // NOI18N
+        headerLabel.setFont(new java.awt.Font("Georgia", 1, 24)); // NOI18N
         headerLabel.setForeground(new java.awt.Color(204, 204, 204));
         headerLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         headerLabel.setLabelFor(HeaderPanel);
@@ -293,7 +313,7 @@ public class Menu extends javax.swing.JFrame {
             HeaderPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, HeaderPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(headerLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 786, Short.MAX_VALUE)
+                .addComponent(headerLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         HeaderPanelLayout.setVerticalGroup(
@@ -304,18 +324,118 @@ public class Menu extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        cardPanel.setBackground(new java.awt.Color(108, 88, 141));
+        cardPanel.setLayout(new java.awt.CardLayout());
+
+        getDataTabPanel.setBackground(new java.awt.Color(108, 88, 141));
+
+        javax.swing.GroupLayout getDataTabPanelLayout = new javax.swing.GroupLayout(getDataTabPanel);
+        getDataTabPanel.setLayout(getDataTabPanelLayout);
+        getDataTabPanelLayout.setHorizontalGroup(
+            getDataTabPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 810, Short.MAX_VALUE)
+        );
+        getDataTabPanelLayout.setVerticalGroup(
+            getDataTabPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 525, Short.MAX_VALUE)
+        );
+
+        cardPanel.add(getDataTabPanel, "card2");
+
+        favouriteTabPanel.setBackground(new java.awt.Color(108, 88, 141));
+
+        javax.swing.GroupLayout favouriteTabPanelLayout = new javax.swing.GroupLayout(favouriteTabPanel);
+        favouriteTabPanel.setLayout(favouriteTabPanelLayout);
+        favouriteTabPanelLayout.setHorizontalGroup(
+            favouriteTabPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 810, Short.MAX_VALUE)
+        );
+        favouriteTabPanelLayout.setVerticalGroup(
+            favouriteTabPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 525, Short.MAX_VALUE)
+        );
+
+        cardPanel.add(favouriteTabPanel, "card3");
+
+        searchTabPanel.setBackground(new java.awt.Color(108, 88, 141));
+
+        javax.swing.GroupLayout searchTabPanelLayout = new javax.swing.GroupLayout(searchTabPanel);
+        searchTabPanel.setLayout(searchTabPanelLayout);
+        searchTabPanelLayout.setHorizontalGroup(
+            searchTabPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 810, Short.MAX_VALUE)
+        );
+        searchTabPanelLayout.setVerticalGroup(
+            searchTabPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 525, Short.MAX_VALUE)
+        );
+
+        cardPanel.add(searchTabPanel, "card4");
+
+        statsTabPanel.setBackground(new java.awt.Color(108, 88, 141));
+
+        javax.swing.GroupLayout statsTabPanelLayout = new javax.swing.GroupLayout(statsTabPanel);
+        statsTabPanel.setLayout(statsTabPanelLayout);
+        statsTabPanelLayout.setHorizontalGroup(
+            statsTabPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 810, Short.MAX_VALUE)
+        );
+        statsTabPanelLayout.setVerticalGroup(
+            statsTabPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 525, Short.MAX_VALUE)
+        );
+
+        cardPanel.add(statsTabPanel, "card5");
+
+        aboutTabPanel.setBackground(new java.awt.Color(108, 88, 141));
+        aboutTabPanel.setForeground(new java.awt.Color(108, 88, 141));
+        aboutTabPanel.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+
+        jScrollPane1.setBorder(null);
+
+        jTextArea1.setEditable(false);
+        jTextArea1.setBackground(new java.awt.Color(108, 88, 141));
+        jTextArea1.setColumns(20);
+        jTextArea1.setFont(new java.awt.Font("Cambria", 0, 24)); // NOI18N
+        jTextArea1.setForeground(new java.awt.Color(255, 255, 255));
+        jTextArea1.setRows(5);
+        jTextArea1.setText("Η εφαρμογή αυτή δημιουργήθηκε από τους φοιτητές \ni) Παναγιώτη Τραπατσα\nii) Αποστολη Νταλαμπιρα και \niii) Δημήτρη Τομπέα\nστα πλαίσια της 3ης ομαδικής εργασίας για την ΠΛΗ24,\nμε επιβλέπων καθηγητή τον κ. Φυτσιλή Παναγιώτη");
+        jTextArea1.setBorder(null);
+        jScrollPane1.setViewportView(jTextArea1);
+
+        javax.swing.GroupLayout aboutTabPanelLayout = new javax.swing.GroupLayout(aboutTabPanel);
+        aboutTabPanel.setLayout(aboutTabPanelLayout);
+        aboutTabPanelLayout.setHorizontalGroup(
+            aboutTabPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(aboutTabPanelLayout.createSequentialGroup()
+                .addGap(37, 37, 37)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 612, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(161, Short.MAX_VALUE))
+        );
+        aboutTabPanelLayout.setVerticalGroup(
+            aboutTabPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(aboutTabPanelLayout.createSequentialGroup()
+                .addGap(68, 68, 68)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 233, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(224, Short.MAX_VALUE))
+        );
+
+        cardPanel.add(aboutTabPanel, "card6");
+
         javax.swing.GroupLayout topPanelLayout = new javax.swing.GroupLayout(topPanel);
         topPanel.setLayout(topPanelLayout);
         topPanelLayout.setHorizontalGroup(
             topPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(HeaderPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(cardPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         topPanelLayout.setVerticalGroup(
             topPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(topPanelLayout.createSequentialGroup()
-                .addGap(31, 31, 31)
-                .addComponent(HeaderPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(500, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(HeaderPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(cardPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 525, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         bgPanel.add(topPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 0, 810, 600));
@@ -328,7 +448,7 @@ public class Menu extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(bgPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 602, Short.MAX_VALUE)
+            .addComponent(bgPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -380,6 +500,10 @@ public class Menu extends javax.swing.JFrame {
 
     private void aboutLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_aboutLabelMouseClicked
         headerLabel.setText(aboutLabel.getText());
+        cardPanel.removeAll();
+        cardPanel.add(aboutTabPanel);
+        cardPanel.repaint();
+        cardPanel.revalidate();
     }//GEN-LAST:event_aboutLabelMouseClicked
 
     private void aboutLabelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_aboutLabelMouseEntered
@@ -389,6 +513,38 @@ public class Menu extends javax.swing.JFrame {
     private void aboutLabelMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_aboutLabelMouseExited
         AboutPanel.setBackground(new Color(85,55,118));
     }//GEN-LAST:event_aboutLabelMouseExited
+
+    private void getLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_getLabelMouseClicked
+        headerLabel.setText(getLabel.getText());
+        cardPanel.removeAll();
+        cardPanel.add(getDataTabPanel);
+        cardPanel.repaint();
+        cardPanel.revalidate();
+    }//GEN-LAST:event_getLabelMouseClicked
+
+    private void favLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_favLabelMouseClicked
+        headerLabel.setText(favLabel.getText());
+        cardPanel.removeAll();
+        cardPanel.add(favouriteTabPanel);
+        cardPanel.repaint();
+        cardPanel.revalidate();
+    }//GEN-LAST:event_favLabelMouseClicked
+
+    private void searchLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_searchLabelMouseClicked
+        headerLabel.setText(searchLabel.getText());
+        cardPanel.removeAll();
+        cardPanel.add(searchTabPanel);
+        cardPanel.repaint();
+        cardPanel.revalidate();
+    }//GEN-LAST:event_searchLabelMouseClicked
+
+    private void statsLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_statsLabelMouseClicked
+        headerLabel.setText(statsLabel.getText());
+        cardPanel.removeAll();
+        cardPanel.add(statsTabPanel);
+        cardPanel.repaint();
+        cardPanel.revalidate();
+    }//GEN-LAST:event_statsLabelMouseClicked
     
     /**
      * @param args the command line arguments
@@ -434,16 +590,24 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JPanel SearchPanel;
     private javax.swing.JPanel StatsPanel;
     private javax.swing.JLabel aboutLabel;
+    private javax.swing.JPanel aboutTabPanel;
     private javax.swing.JPanel bgPanel;
+    private javax.swing.JPanel cardPanel;
     private javax.swing.JLabel exitLabel;
     private javax.swing.JLabel favLabel;
+    private javax.swing.JPanel favouriteTabPanel;
+    private javax.swing.JPanel getDataTabPanel;
     private javax.swing.JLabel getLabel;
     private javax.swing.JLabel headerLabel;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextArea jTextArea1;
     private javax.swing.JLabel searchLabel;
+    private javax.swing.JPanel searchTabPanel;
     private javax.swing.JPanel sidebarPanel;
     private javax.swing.JLabel statsLabel;
+    private javax.swing.JPanel statsTabPanel;
     private javax.swing.JPanel topPanel;
     // End of variables declaration//GEN-END:variables
 }
