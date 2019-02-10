@@ -6,6 +6,10 @@
 package myMovies;
 
 import java.awt.Color;
+import java.util.List;
+import javax.persistence.EntityManager;
+import javax.persistence.Persistence;
+import javax.persistence.Query;
 import javax.swing.ImageIcon;
 
 /**
@@ -19,6 +23,13 @@ public class Menu extends javax.swing.JFrame {
      */
     public Menu() {
         initComponents();
+        EntityManager entityManager = Persistence.createEntityManagerFactory("MyMoviesProjectPU").createEntityManager();
+        Query query = entityManager.createNamedQuery("Movie.findAll");
+        List<Movie> resultList;
+        resultList = query.getResultList();
+        for (Movie m : resultList) {
+          jTextArea2.append(m.getTitle()+ " (" + m.getOverview()+ ")" + "\n");
+        }
     }
 
     /**
@@ -52,6 +63,8 @@ public class Menu extends javax.swing.JFrame {
         cardPanel = new javax.swing.JPanel();
         getDataTabPanel = new javax.swing.JPanel();
         favouriteTabPanel = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTextArea2 = new javax.swing.JTextArea();
         searchTabPanel = new javax.swing.JPanel();
         statsTabPanel = new javax.swing.JPanel();
         aboutTabPanel = new javax.swing.JPanel();
@@ -344,15 +357,28 @@ public class Menu extends javax.swing.JFrame {
 
         favouriteTabPanel.setBackground(new java.awt.Color(108, 88, 141));
 
+        jTextArea2.setBackground(new java.awt.Color(108, 88, 141));
+        jTextArea2.setColumns(20);
+        jTextArea2.setFont(new java.awt.Font("Monospaced", 0, 12)); // NOI18N
+        jTextArea2.setForeground(new java.awt.Color(255, 255, 255));
+        jTextArea2.setRows(5);
+        jScrollPane2.setViewportView(jTextArea2);
+
         javax.swing.GroupLayout favouriteTabPanelLayout = new javax.swing.GroupLayout(favouriteTabPanel);
         favouriteTabPanel.setLayout(favouriteTabPanelLayout);
         favouriteTabPanelLayout.setHorizontalGroup(
             favouriteTabPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 810, Short.MAX_VALUE)
+            .addGroup(favouriteTabPanelLayout.createSequentialGroup()
+                .addGap(132, 132, 132)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 535, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(143, Short.MAX_VALUE))
         );
         favouriteTabPanelLayout.setVerticalGroup(
             favouriteTabPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 525, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, favouriteTabPanelLayout.createSequentialGroup()
+                .addContainerGap(147, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 365, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         cardPanel.add(favouriteTabPanel, "card3");
@@ -602,7 +628,9 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JTextArea jTextArea2;
     private javax.swing.JLabel searchLabel;
     private javax.swing.JPanel searchTabPanel;
     private javax.swing.JPanel sidebarPanel;
