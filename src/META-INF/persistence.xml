@@ -3,6 +3,8 @@
   <persistence-unit name="MyMoviesProjectPU" transaction-type="RESOURCE_LOCAL">
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
     <class>myMovies.Movie</class>
+    <class>myMovies.Genre</class>
+    <class>myMovies.FavoriteList</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:derby://localhost:1527/moviedb"/>
       <property name="javax.persistence.jdbc.user" value="pli24"/>

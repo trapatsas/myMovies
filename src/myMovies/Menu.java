@@ -11,6 +11,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -425,7 +426,7 @@ public class Menu extends javax.swing.JFrame {
         jTextArea1.setFont(new java.awt.Font("Cambria", 0, 24)); // NOI18N
         jTextArea1.setForeground(new java.awt.Color(255, 255, 255));
         jTextArea1.setRows(5);
-        jTextArea1.setText("Η εφαρμογή αυτή δημιουργήθηκε από τους φοιτητές \ni) Παναγιώτη Τραπατσα\nii) Αποστολη Νταλαμπιρα και \niii) Δημήτρη Τομπέα\nστα πλαίσια της 3ης ομαδικής εργασίας για την ΠΛΗ24,\nμε επιβλέπων καθηγητή τον κ. Φυτσιλή Παναγιώτη");
+        jTextArea1.setText("Η εφαρμογή αυτή δημιουργήθηκε από τους φοιτητές \ni) Παναγιώτη Τραπατσα\nii) Αποστολη Νταλαμπιρα και \niii) Δημήτρη Τομπέα\nστα πλαίσια της 3ης ομαδικής εργασίας για την ΠΛΗ24,\nμε επιβλέπων καθηγητή τον κ. Φιτσιλή Παναγιώτη\n");
         jTextArea1.setBorder(null);
         jScrollPane1.setViewportView(jTextArea1);
 
@@ -546,6 +547,24 @@ public class Menu extends javax.swing.JFrame {
         cardPanel.add(getDataTabPanel);
         cardPanel.repaint();
         cardPanel.revalidate();
+        
+        ImportData importData = new ImportData();
+        importData.clearDataBase();
+        JOptionPane.showMessageDialog(null, "Η ΔΙΑΓΡΑΦΗ ΤΗΣ ΒΑΣΗΣ ΟΛΟΚΛΗΡΩΘΗΚΕ!", "ΠΛΗΡΟΦΟΡΙΑ", JOptionPane.WARNING_MESSAGE);
+        try {
+            importData.tableGenre();
+            JOptionPane.showMessageDialog(null, "Ολοκληρώθηκε η εισαγωγή τιμών στον πίνακα Genre!", "ΠΛΗΡΟΦΟΡΙΑ", JOptionPane.WARNING_MESSAGE);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        
+        try {
+            importData.tableMovies();
+            JOptionPane.showMessageDialog(null, "Ολοκληρώθηκε η εισαγωγή τιμών στον πίνακα Movie!", "ΠΛΗΡΟΦΟΡΙΑ", JOptionPane.WARNING_MESSAGE);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } 
+        
     }//GEN-LAST:event_getLabelMouseClicked
 
     private void favLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_favLabelMouseClicked
