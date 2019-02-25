@@ -8,9 +8,9 @@ package myMovies;
 import java.awt.Color;
 import java.util.List;
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
-import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
 /**
@@ -24,11 +24,9 @@ public class Menu extends javax.swing.JFrame {
      */
     public Menu() {
         initComponents();
-        EntityManager entityManager = Persistence.createEntityManagerFactory("MyMoviesProjectPU").createEntityManager();
-        Query query = entityManager.createNamedQuery("Movie.findAll");
-        List<Movie> resultList;
-        resultList = query.getResultList();
-        for (Movie m : resultList) {
+        EntityManagerFactory entityManager = Persistence.createEntityManagerFactory("MyMoviesProjectPU");
+        MovieJpaController movieController = new MovieJpaController(entityManager);
+        for (Movie m : movieController.findMovieEntities()) {
           jTextArea2.append(m.getTitle()+ " (" + m.getOverview()+ ")" + "\n");
         }
     }
@@ -548,18 +546,18 @@ public class Menu extends javax.swing.JFrame {
         cardPanel.repaint();
         cardPanel.revalidate();
         
-        ImportData importData = new ImportData();
-        importData.clearDataBase();
+        ExtractedData importData = new ExtractedData();
+        importData.deleteDataBase();
         JOptionPane.showMessageDialog(null, "Η ΔΙΑΓΡΑΦΗ ΤΗΣ ΒΑΣΗΣ ΟΛΟΚΛΗΡΩΘΗΚΕ!", "ΠΛΗΡΟΦΟΡΙΑ", JOptionPane.WARNING_MESSAGE);
         try {
-            importData.tableGenre();
+            importData.fillGenreTable();
             JOptionPane.showMessageDialog(null, "Ολοκληρώθηκε η εισαγωγή τιμών στον πίνακα Genre!", "ΠΛΗΡΟΦΟΡΙΑ", JOptionPane.WARNING_MESSAGE);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
         
         try {
-            importData.tableMovies();
+            importData.fillMovieTable();
             JOptionPane.showMessageDialog(null, "Ολοκληρώθηκε η εισαγωγή τιμών στον πίνακα Movie!", "ΠΛΗΡΟΦΟΡΙΑ", JOptionPane.WARNING_MESSAGE);
         } catch (Exception ex) {
             ex.printStackTrace();
