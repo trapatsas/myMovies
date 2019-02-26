@@ -12,6 +12,8 @@ import java.text.SimpleDateFormat;
 import javax.json.Json;
 import javax.json.JsonArray;
 import javax.json.JsonObject;
+import javax.swing.JOptionPane;
+import javax.swing.JTextArea;
 
 public class ExtractedData {
 
@@ -22,8 +24,11 @@ public class ExtractedData {
     private final ArrayList<Integer> allowedGenreIds;
     GenreJpaController genreController = new GenreJpaController(emf);
     MovieJpaController movieController = new MovieJpaController(emf);
+    private JTextArea logArea;
 
-    public ExtractedData() {
+    public ExtractedData(JTextArea jTextArea) {
+        this.logArea = jTextArea;
+
         this.allowedGenres = new ArrayList<>();
         allowedGenres.add("Action");
         allowedGenres.add("Romance");
@@ -36,18 +41,17 @@ public class ExtractedData {
     }
 
     public void deleteDataBase() {
-        EntityTransaction trans = em.getTransaction();
-        trans.begin();
+        EntityTransaction transaction = em.getTransaction();
+        transaction.begin();
         em.createQuery("DELETE FROM Movie").executeUpdate();
         em.createQuery("DELETE FROM FavoriteList").executeUpdate();
         em.createQuery("DELETE FROM Genre").executeUpdate();
         em.createNativeQuery("ALTER TABLE FAVORITE_LIST ALTER COLUMN ID RESTART WITH 1").executeUpdate();
-        trans.commit();
+        transaction.commit();
     }
 
     public void fillGenreTable() throws IOException, Exception {
         JsonObject api = importTables("https://api.themoviedb.org/3/genre/movie/list?api_key=" + key);
-
         JsonArray genreData = api.getJsonArray("genres");
 
         for (JsonObject genre : genreData.getValuesAs(JsonObject.class)) {
@@ -58,11 +62,29 @@ public class ExtractedData {
     }
 
     public void fillMovieTable() throws IOException, Exception {
-        JsonObject api = importTables("https://api.themoviedb.org/3/discover/movie?"
-                + "with_genres=28,878,10749&primary_release_date.gte=2000-01-01&api_key=" + key);
 
-        JsonArray movieResults = api.getJsonArray("results");
+        for (int gId : this.allowedGenreIds) {
 
+            int current_page = 1;
+            int total_pages;
+
+            JOptionPane.showMessageDialog(null, "Ανάκτηση αποτελεσμάτων από το είδος με κωδικό "
+                    + gId, "ΠΛΗΡΟΦΟΡΙΑ", JOptionPane.WARNING_MESSAGE);
+
+            do {
+                this.logArea.append("\nΑνάκτηση αποτελεσμάτων από τη σελίδα " + current_page + "... \n");
+                JsonObject nextPageResults = discoverMoviesQueryStringBuilder(current_page, gId, key);
+                total_pages = nextPageResults.getInt("total_pages");
+                this.logArea.append("Ανακτήθηκε η " + current_page + "η σελίδα από σύνολο " + total_pages + " σελίδων. \n");
+                JsonArray nextPageMovieResults = nextPageResults.getJsonArray("results");
+                saveMovieResults(nextPageMovieResults, logArea);
+                current_page++;
+            } while (current_page < Math.min(total_pages, 13));
+
+        }
+    }
+
+    private void saveMovieResults(JsonArray movieResults, JTextArea logArea) throws Exception {
         for (JsonObject movieData : movieResults.getValuesAs(JsonObject.class)) {
 
             SimpleDateFormat dateForm = new SimpleDateFormat("yyyy-MM-dd");
@@ -92,7 +114,15 @@ public class ExtractedData {
                 }
             }
 
-            movieController.create(movie);
+            this.logArea.append("\nΝέα ταινία " + movie.getId() + " τύπου '" + movie.getGenreId().getName() + "' βρέθηκε. \n");
+
+            // Ελέγχουμε αν η ταινία είναι ήδη στη βάση ώστε να αποφύγουμε τις διπλοεγγραφές
+            if (movieController.findMovie(movie.getId()) == null) {
+                movieController.create(movie);
+                this.logArea.append("Η ταινία " + movie.getId() + " αποθηκεύτηκε στη βάση. \n");
+            } else {
+                this.logArea.append("Η ταινία " + movie.getId() + " υπάρχει ήδη στη βάση. \n");
+            }
         }
     }
 
@@ -101,5 +131,12 @@ public class ExtractedData {
         URL url = new URL(urlString);
 
         return Json.createReader(url.openStream()).readObject();
+    }
+
+    private JsonObject discoverMoviesQueryStringBuilder(int page, int genreId, String key) throws IOException {
+        return importTables("https://api.themoviedb.org/3/discover/movie?"
+                + "with_genres=" + genreId
+                + "&primary_release_date.gte=2000-01-01&page=" + page
+                + "&api_key=" + key);
     }
 }

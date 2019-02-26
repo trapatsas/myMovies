@@ -6,11 +6,8 @@
 package myMovies;
 
 import java.awt.Color;
-import java.util.List;
-import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import javax.persistence.Query;
 import javax.swing.JOptionPane;
 
 /**
@@ -27,7 +24,7 @@ public class Menu extends javax.swing.JFrame {
         EntityManagerFactory entityManager = Persistence.createEntityManagerFactory("MyMoviesProjectPU");
         MovieJpaController movieController = new MovieJpaController(entityManager);
         for (Movie m : movieController.findMovieEntities()) {
-          jTextArea2.append(m.getTitle()+ " (" + m.getOverview()+ ")" + "\n");
+            jTextArea2.append(m.getTitle() + " (" + m.getOverview() + ")" + "\n");
         }
     }
 
@@ -61,6 +58,8 @@ public class Menu extends javax.swing.JFrame {
         headerLabel = new javax.swing.JLabel();
         cardPanel = new javax.swing.JPanel();
         getDataTabPanel = new javax.swing.JPanel();
+        getDataLogArea = new javax.swing.JScrollPane();
+        getDataLogTextArea = new javax.swing.JTextArea();
         favouriteTabPanel = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTextArea2 = new javax.swing.JTextArea();
@@ -68,7 +67,7 @@ public class Menu extends javax.swing.JFrame {
         statsTabPanel = new javax.swing.JPanel();
         aboutTabPanel = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        aboutPaneTextArea = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(108, 88, 141));
@@ -331,7 +330,7 @@ public class Menu extends javax.swing.JFrame {
         HeaderPanelLayout.setVerticalGroup(
             HeaderPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, HeaderPanelLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(11, Short.MAX_VALUE)
                 .addComponent(headerLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -341,15 +340,32 @@ public class Menu extends javax.swing.JFrame {
 
         getDataTabPanel.setBackground(new java.awt.Color(108, 88, 141));
 
+        getDataLogArea.setBackground(new java.awt.Color(108, 88, 141));
+        getDataLogArea.setForeground(new java.awt.Color(255, 255, 255));
+        getDataLogArea.setToolTipText("");
+
+        getDataLogTextArea.setEditable(false);
+        getDataLogTextArea.setBackground(new java.awt.Color(108, 88, 141));
+        getDataLogTextArea.setColumns(20);
+        getDataLogTextArea.setForeground(new java.awt.Color(255, 255, 255));
+        getDataLogTextArea.setRows(5);
+        getDataLogTextArea.setBorder(null);
+        getDataLogArea.setViewportView(getDataLogTextArea);
+
         javax.swing.GroupLayout getDataTabPanelLayout = new javax.swing.GroupLayout(getDataTabPanel);
         getDataTabPanel.setLayout(getDataTabPanelLayout);
         getDataTabPanelLayout.setHorizontalGroup(
             getDataTabPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 810, Short.MAX_VALUE)
+            .addGroup(getDataTabPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(getDataLogArea, javax.swing.GroupLayout.DEFAULT_SIZE, 798, Short.MAX_VALUE)
+                .addContainerGap())
         );
         getDataTabPanelLayout.setVerticalGroup(
             getDataTabPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 525, Short.MAX_VALUE)
+            .addGroup(getDataTabPanelLayout.createSequentialGroup()
+                .addComponent(getDataLogArea, javax.swing.GroupLayout.DEFAULT_SIZE, 519, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         cardPanel.add(getDataTabPanel, "card2");
@@ -418,15 +434,15 @@ public class Menu extends javax.swing.JFrame {
 
         jScrollPane1.setBorder(null);
 
-        jTextArea1.setEditable(false);
-        jTextArea1.setBackground(new java.awt.Color(108, 88, 141));
-        jTextArea1.setColumns(20);
-        jTextArea1.setFont(new java.awt.Font("Cambria", 0, 24)); // NOI18N
-        jTextArea1.setForeground(new java.awt.Color(255, 255, 255));
-        jTextArea1.setRows(5);
-        jTextArea1.setText("Η εφαρμογή αυτή δημιουργήθηκε από τους φοιτητές \ni) Παναγιώτη Τραπατσα\nii) Αποστολη Νταλαμπιρα και \niii) Δημήτρη Τομπέα\nστα πλαίσια της 3ης ομαδικής εργασίας για την ΠΛΗ24,\nμε επιβλέπων καθηγητή τον κ. Φιτσιλή Παναγιώτη\n");
-        jTextArea1.setBorder(null);
-        jScrollPane1.setViewportView(jTextArea1);
+        aboutPaneTextArea.setEditable(false);
+        aboutPaneTextArea.setBackground(new java.awt.Color(108, 88, 141));
+        aboutPaneTextArea.setColumns(20);
+        aboutPaneTextArea.setFont(new java.awt.Font("Cambria", 0, 18)); // NOI18N
+        aboutPaneTextArea.setForeground(new java.awt.Color(255, 255, 255));
+        aboutPaneTextArea.setRows(5);
+        aboutPaneTextArea.setText("Η εφαρμογή αυτή δημιουργήθηκε από τους φοιτητές \ni) Παναγιώτη Τραπατσα\nii) Αποστολη Νταλαμπιρα και \niii) Δημήτρη Τομπέα\nστα πλαίσια της 3ης ομαδικής εργασίας για την ΠΛΗ24,\nμε επιβλέπων καθηγητή τον κ. Φιτσιλή Παναγιώτη\n");
+        aboutPaneTextArea.setBorder(null);
+        jScrollPane1.setViewportView(aboutPaneTextArea);
 
         javax.swing.GroupLayout aboutTabPanelLayout = new javax.swing.GroupLayout(aboutTabPanel);
         aboutTabPanel.setLayout(aboutTabPanelLayout);
@@ -458,7 +474,7 @@ public class Menu extends javax.swing.JFrame {
             topPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(topPanelLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(HeaderPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(HeaderPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(cardPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 525, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -484,43 +500,43 @@ public class Menu extends javax.swing.JFrame {
     }//GEN-LAST:event_exitLabelMouseClicked
 
     private void exitLabelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_exitLabelMouseEntered
-        ExitPanel.setBackground(new Color(108,88,141));
+        ExitPanel.setBackground(new Color(108, 88, 141));
     }//GEN-LAST:event_exitLabelMouseEntered
 
     private void exitLabelMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_exitLabelMouseExited
-        ExitPanel.setBackground(new Color(85,55,118));
+        ExitPanel.setBackground(new Color(85, 55, 118));
     }//GEN-LAST:event_exitLabelMouseExited
 
     private void searchLabelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_searchLabelMouseEntered
-        SearchPanel.setBackground(new Color(108,88,141));
+        SearchPanel.setBackground(new Color(108, 88, 141));
     }//GEN-LAST:event_searchLabelMouseEntered
 
     private void searchLabelMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_searchLabelMouseExited
-        SearchPanel.setBackground(new Color(85,55,118));
+        SearchPanel.setBackground(new Color(85, 55, 118));
     }//GEN-LAST:event_searchLabelMouseExited
 
     private void getLabelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_getLabelMouseEntered
-        GetMoviesPanel.setBackground(new Color(108,88,141));
+        GetMoviesPanel.setBackground(new Color(108, 88, 141));
     }//GEN-LAST:event_getLabelMouseEntered
 
     private void getLabelMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_getLabelMouseExited
-        GetMoviesPanel.setBackground(new Color(85,55,118));
+        GetMoviesPanel.setBackground(new Color(85, 55, 118));
     }//GEN-LAST:event_getLabelMouseExited
 
     private void favLabelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_favLabelMouseEntered
-        FavouritePanel.setBackground(new Color(108,88,141));
+        FavouritePanel.setBackground(new Color(108, 88, 141));
     }//GEN-LAST:event_favLabelMouseEntered
 
     private void favLabelMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_favLabelMouseExited
-        FavouritePanel.setBackground(new Color(85,55,118));
+        FavouritePanel.setBackground(new Color(85, 55, 118));
     }//GEN-LAST:event_favLabelMouseExited
 
     private void statsLabelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_statsLabelMouseEntered
-        StatsPanel.setBackground(new Color(108,88,141));
+        StatsPanel.setBackground(new Color(108, 88, 141));
     }//GEN-LAST:event_statsLabelMouseEntered
 
     private void statsLabelMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_statsLabelMouseExited
-        StatsPanel.setBackground(new Color(85,55,118));
+        StatsPanel.setBackground(new Color(85, 55, 118));
     }//GEN-LAST:event_statsLabelMouseExited
 
     private void aboutLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_aboutLabelMouseClicked
@@ -532,11 +548,11 @@ public class Menu extends javax.swing.JFrame {
     }//GEN-LAST:event_aboutLabelMouseClicked
 
     private void aboutLabelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_aboutLabelMouseEntered
-        AboutPanel.setBackground(new Color(108,88,141));
+        AboutPanel.setBackground(new Color(108, 88, 141));
     }//GEN-LAST:event_aboutLabelMouseEntered
 
     private void aboutLabelMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_aboutLabelMouseExited
-        AboutPanel.setBackground(new Color(85,55,118));
+        AboutPanel.setBackground(new Color(85, 55, 118));
     }//GEN-LAST:event_aboutLabelMouseExited
 
     private void getLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_getLabelMouseClicked
@@ -545,24 +561,29 @@ public class Menu extends javax.swing.JFrame {
         cardPanel.add(getDataTabPanel);
         cardPanel.repaint();
         cardPanel.revalidate();
-        
-        ExtractedData importData = new ExtractedData();
+
+        ExtractedData importData = new ExtractedData(getDataLogTextArea);
         importData.deleteDataBase();
+        getDataLogTextArea.append("Η ΔΙΑΓΡΑΦΗ ΤΗΣ ΒΑΣΗΣ ΟΛΟΚΛΗΡΩΘΗΚΕ!" + "\n\n");
         JOptionPane.showMessageDialog(null, "Η ΔΙΑΓΡΑΦΗ ΤΗΣ ΒΑΣΗΣ ΟΛΟΚΛΗΡΩΘΗΚΕ!", "ΠΛΗΡΟΦΟΡΙΑ", JOptionPane.WARNING_MESSAGE);
         try {
             importData.fillGenreTable();
+            getDataLogTextArea.append("Ολοκληρώθηκε η εισαγωγή τιμών στον πίνακα Genre!" + "\n\n");
             JOptionPane.showMessageDialog(null, "Ολοκληρώθηκε η εισαγωγή τιμών στον πίνακα Genre!", "ΠΛΗΡΟΦΟΡΙΑ", JOptionPane.WARNING_MESSAGE);
         } catch (Exception ex) {
+            getDataLogTextArea.append(ex.getMessage() + "\n\n");
             ex.printStackTrace();
         }
-        
+
         try {
+            JOptionPane.showMessageDialog(null, "Ξεκινάει η εισαγωγή ταινιών!", "ΠΛΗΡΟΦΟΡΙΑ", JOptionPane.WARNING_MESSAGE);
             importData.fillMovieTable();
-            JOptionPane.showMessageDialog(null, "Ολοκληρώθηκε η εισαγωγή τιμών στον πίνακα Movie!", "ΠΛΗΡΟΦΟΡΙΑ", JOptionPane.WARNING_MESSAGE);
+            getDataLogTextArea.append("Ολοκληρώθηκε η εισαγωγή τιμών στον πίνακα Movie!" + "\n\n");
         } catch (Exception ex) {
+            getDataLogTextArea.append(ex.getMessage() + "\n\n");
             ex.printStackTrace();
-        } 
-        
+        }
+
     }//GEN-LAST:event_getLabelMouseClicked
 
     private void favLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_favLabelMouseClicked
@@ -588,7 +609,7 @@ public class Menu extends javax.swing.JFrame {
         cardPanel.repaint();
         cardPanel.revalidate();
     }//GEN-LAST:event_statsLabelMouseClicked
-    
+
     /**
      * @param args the command line arguments
      */
@@ -633,12 +654,15 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JPanel SearchPanel;
     private javax.swing.JPanel StatsPanel;
     private javax.swing.JLabel aboutLabel;
+    private javax.swing.JTextArea aboutPaneTextArea;
     private javax.swing.JPanel aboutTabPanel;
     private javax.swing.JPanel bgPanel;
     private javax.swing.JPanel cardPanel;
     private javax.swing.JLabel exitLabel;
     private javax.swing.JLabel favLabel;
     private javax.swing.JPanel favouriteTabPanel;
+    private javax.swing.JScrollPane getDataLogArea;
+    private javax.swing.JTextArea getDataLogTextArea;
     private javax.swing.JPanel getDataTabPanel;
     private javax.swing.JLabel getLabel;
     private javax.swing.JLabel headerLabel;
@@ -646,7 +670,6 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextArea jTextArea2;
     private javax.swing.JLabel searchLabel;
     private javax.swing.JPanel searchTabPanel;
