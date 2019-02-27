@@ -6,9 +6,13 @@
 package myMovies;
 
 import java.awt.Color;
+import java.util.List;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.swing.DefaultListModel;
+import javax.swing.JDialog;
 import javax.swing.JOptionPane;
+import javax.swing.ListModel;
 
 /**
  *
@@ -16,16 +20,20 @@ import javax.swing.JOptionPane;
  */
 public class Menu extends javax.swing.JFrame {
 
+    FavoriteListJpaController favoriteListJpaController;
+
     /**
      * Creates new form Menu
      */
     public Menu() {
         initComponents();
-        EntityManagerFactory entityManager = Persistence.createEntityManagerFactory("MyMoviesProjectPU");
-        MovieJpaController movieController = new MovieJpaController(entityManager);
-        for (Movie m : movieController.findMovieEntities()) {
-            jTextArea2.append(m.getTitle() + " (" + m.getOverview() + ")" + "\n");
-        }
+        EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("MyMoviesProjectPU");
+        this.favoriteListJpaController = new FavoriteListJpaController(entityManagerFactory);
+//        EntityManagerFactory entityManager = Persistence.createEntityManagerFactory("MyMoviesProjectPU");
+//        MovieJpaController movieController = new MovieJpaController(entityManager);
+//        for (Movie m : movieController.findMovieEntities()) {
+//            jTextArea2.append(m.getTitle() + " (" + m.getOverview() + ")" + "\n");
+//        }
     }
 
     /**
@@ -36,7 +44,11 @@ public class Menu extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
+        MyMoviesProjectPUEntityManager = java.beans.Beans.isDesignTime() ? null : javax.persistence.Persistence.createEntityManagerFactory("MyMoviesProjectPU").createEntityManager();
+        favoriteListQuery = java.beans.Beans.isDesignTime() ? null : MyMoviesProjectPUEntityManager.createQuery("SELECT f.name FROM FavoriteList f");
+        favoriteListList = java.beans.Beans.isDesignTime() ? java.util.Collections.emptyList() : favoriteListQuery.getResultList();
         bgPanel = new javax.swing.JPanel();
         sidebarPanel = new javax.swing.JPanel();
         GetMoviesPanel = new javax.swing.JPanel();
@@ -62,7 +74,13 @@ public class Menu extends javax.swing.JFrame {
         getDataLogTextArea = new javax.swing.JTextArea();
         favouriteTabPanel = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTextArea2 = new javax.swing.JTextArea();
+        allFavoritesList = new javax.swing.JList<>();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
+        createButton = new javax.swing.JButton();
+        editListButton = new javax.swing.JButton();
+        createButton2 = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
         searchTabPanel = new javax.swing.JPanel();
         statsTabPanel = new javax.swing.JPanel();
         aboutTabPanel = new javax.swing.JPanel();
@@ -372,28 +390,92 @@ public class Menu extends javax.swing.JFrame {
 
         favouriteTabPanel.setBackground(new java.awt.Color(108, 88, 141));
 
-        jTextArea2.setBackground(new java.awt.Color(108, 88, 141));
-        jTextArea2.setColumns(20);
-        jTextArea2.setFont(new java.awt.Font("Monospaced", 0, 12)); // NOI18N
-        jTextArea2.setForeground(new java.awt.Color(255, 255, 255));
-        jTextArea2.setRows(5);
-        jScrollPane2.setViewportView(jTextArea2);
+        org.jdesktop.swingbinding.JListBinding jListBinding = org.jdesktop.swingbinding.SwingBindings.createJListBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, favoriteListList, allFavoritesList);
+        bindingGroup.addBinding(jListBinding);
+
+        jScrollPane2.setViewportView(allFavoritesList);
+
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane3.setViewportView(jTable1);
+
+        createButton.setText("Δημιουργία");
+        createButton.setToolTipText("");
+        createButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                createButtonActionPerformed(evt);
+            }
+        });
+
+        editListButton.setText("Επεξεργασία");
+        editListButton.setToolTipText("");
+        editListButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                editListButtonActionPerformed(evt);
+            }
+        });
+
+        createButton2.setText("Διαγραφή");
+        createButton2.setToolTipText("");
+        createButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                createButton2ActionPerformed(evt);
+            }
+        });
+
+        jButton1.setText("Ενημέρωση Λίστας");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout favouriteTabPanelLayout = new javax.swing.GroupLayout(favouriteTabPanel);
         favouriteTabPanel.setLayout(favouriteTabPanelLayout);
         favouriteTabPanelLayout.setHorizontalGroup(
             favouriteTabPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(favouriteTabPanelLayout.createSequentialGroup()
-                .addGap(132, 132, 132)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 535, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(143, Short.MAX_VALUE))
+                .addContainerGap()
+                .addGroup(favouriteTabPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(favouriteTabPanelLayout.createSequentialGroup()
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 284, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 502, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(favouriteTabPanelLayout.createSequentialGroup()
+                        .addGroup(favouriteTabPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(favouriteTabPanelLayout.createSequentialGroup()
+                                .addComponent(createButton)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(editListButton)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(createButton2))
+                            .addComponent(jButton1))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         favouriteTabPanelLayout.setVerticalGroup(
             favouriteTabPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, favouriteTabPanelLayout.createSequentialGroup()
-                .addContainerGap(147, Short.MAX_VALUE)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 365, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addGroup(favouriteTabPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(createButton)
+                    .addComponent(editListButton)
+                    .addComponent(createButton2))
+                .addGap(18, 18, 18)
+                .addGroup(favouriteTabPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 429, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton1)
+                .addContainerGap(14, Short.MAX_VALUE))
         );
 
         cardPanel.add(favouriteTabPanel, "card3");
@@ -491,6 +573,8 @@ public class Menu extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(bgPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
+
+        bindingGroup.bind();
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -610,6 +694,34 @@ public class Menu extends javax.swing.JFrame {
         cardPanel.revalidate();
     }//GEN-LAST:event_statsLabelMouseClicked
 
+    private void createButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createButtonActionPerformed
+        NewFavouriteListJDialog sForm = new NewFavouriteListJDialog(null, false);
+        sForm.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+        sForm.pack();
+        sForm.setLocationRelativeTo(createButton);
+
+        sForm.setVisible(true);
+    }//GEN-LAST:event_createButtonActionPerformed
+
+    private void editListButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editListButtonActionPerformed
+// TODO add your handling code here:
+    }//GEN-LAST:event_editListButtonActionPerformed
+
+    public void updateFavouritesList() {
+        List<FavoriteList> favoriteList = this.favoriteListJpaController.findFavoriteListEntities();
+        DefaultListModel lm = new DefaultListModel<>();
+        favoriteList.forEach(fv -> lm.addElement(fv.getName()));
+        allFavoritesList.setModel(lm);
+    }
+
+    private void createButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createButton2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_createButton2ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        updateFavouritesList();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -651,31 +763,41 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JPanel FavouritePanel;
     private javax.swing.JPanel GetMoviesPanel;
     private javax.swing.JPanel HeaderPanel;
+    private javax.persistence.EntityManager MyMoviesProjectPUEntityManager;
     private javax.swing.JPanel SearchPanel;
     private javax.swing.JPanel StatsPanel;
     private javax.swing.JLabel aboutLabel;
     private javax.swing.JTextArea aboutPaneTextArea;
     private javax.swing.JPanel aboutTabPanel;
+    private javax.swing.JList<String> allFavoritesList;
     private javax.swing.JPanel bgPanel;
     private javax.swing.JPanel cardPanel;
+    private javax.swing.JButton createButton;
+    private javax.swing.JButton createButton2;
+    private javax.swing.JButton editListButton;
     private javax.swing.JLabel exitLabel;
     private javax.swing.JLabel favLabel;
+    private java.util.List<myMovies.FavoriteList> favoriteListList;
+    private javax.persistence.Query favoriteListQuery;
     private javax.swing.JPanel favouriteTabPanel;
     private javax.swing.JScrollPane getDataLogArea;
     private javax.swing.JTextArea getDataLogTextArea;
     private javax.swing.JPanel getDataTabPanel;
     private javax.swing.JLabel getLabel;
     private javax.swing.JLabel headerLabel;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextArea jTextArea2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JTable jTable1;
     private javax.swing.JLabel searchLabel;
     private javax.swing.JPanel searchTabPanel;
     private javax.swing.JPanel sidebarPanel;
     private javax.swing.JLabel statsLabel;
     private javax.swing.JPanel statsTabPanel;
     private javax.swing.JPanel topPanel;
+    private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 }
