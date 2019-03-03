@@ -79,8 +79,7 @@ public class Menu extends javax.swing.JFrame {
         jTable1 = new javax.swing.JTable();
         createButton = new javax.swing.JButton();
         editListButton = new javax.swing.JButton();
-        createButton2 = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
+        deleteButton = new javax.swing.JButton();
         searchTabPanel = new javax.swing.JPanel();
         statsTabPanel = new javax.swing.JPanel();
         aboutTabPanel = new javax.swing.JPanel();
@@ -424,18 +423,11 @@ public class Menu extends javax.swing.JFrame {
             }
         });
 
-        createButton2.setText("Διαγραφή");
-        createButton2.setToolTipText("");
-        createButton2.addActionListener(new java.awt.event.ActionListener() {
+        deleteButton.setText("Διαγραφή");
+        deleteButton.setToolTipText("");
+        deleteButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                createButton2ActionPerformed(evt);
-            }
-        });
-
-        jButton1.setText("Ενημέρωση Λίστας");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                deleteButtonActionPerformed(evt);
             }
         });
 
@@ -451,14 +443,11 @@ public class Menu extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 502, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(favouriteTabPanelLayout.createSequentialGroup()
-                        .addGroup(favouriteTabPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(favouriteTabPanelLayout.createSequentialGroup()
-                                .addComponent(createButton)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(editListButton)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(createButton2))
-                            .addComponent(jButton1))
+                        .addComponent(createButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(editListButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(deleteButton)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -468,14 +457,12 @@ public class Menu extends javax.swing.JFrame {
                 .addGroup(favouriteTabPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(createButton)
                     .addComponent(editListButton)
-                    .addComponent(createButton2))
+                    .addComponent(deleteButton))
                 .addGap(18, 18, 18)
                 .addGroup(favouriteTabPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 429, Short.MAX_VALUE)
+                    .addComponent(jScrollPane3)
                     .addComponent(jScrollPane2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton1)
-                .addContainerGap(14, Short.MAX_VALUE))
+                .addContainerGap(58, Short.MAX_VALUE))
         );
 
         cardPanel.add(favouriteTabPanel, "card3");
@@ -667,6 +654,8 @@ public class Menu extends javax.swing.JFrame {
             getDataLogTextArea.append(ex.getMessage() + "\n\n");
             ex.printStackTrace();
         }
+        
+        JOptionPane.showMessageDialog(null, " Η ανάκτηση των δεδομένων ολοκληρώθηκε!", "ΠΛΗΡΟΦΟΡΙΑ", JOptionPane.WARNING_MESSAGE);
 
     }//GEN-LAST:event_getLabelMouseClicked
 
@@ -695,7 +684,9 @@ public class Menu extends javax.swing.JFrame {
     }//GEN-LAST:event_statsLabelMouseClicked
 
     private void createButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createButtonActionPerformed
-        NewFavouriteListJDialog sForm = new NewFavouriteListJDialog(null, false);
+        ListModel lm = allFavoritesList.getModel();
+        
+        NewFavouriteListJDialog sForm = new NewFavouriteListJDialog(null, false, allFavoritesList);
         sForm.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         sForm.pack();
         sForm.setLocationRelativeTo(createButton);
@@ -714,13 +705,9 @@ public class Menu extends javax.swing.JFrame {
         allFavoritesList.setModel(lm);
     }
 
-    private void createButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createButton2ActionPerformed
+    private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_createButton2ActionPerformed
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        updateFavouritesList();
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_deleteButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -773,7 +760,7 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JPanel bgPanel;
     private javax.swing.JPanel cardPanel;
     private javax.swing.JButton createButton;
-    private javax.swing.JButton createButton2;
+    private javax.swing.JButton deleteButton;
     private javax.swing.JButton editListButton;
     private javax.swing.JLabel exitLabel;
     private javax.swing.JLabel favLabel;
@@ -785,7 +772,6 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JPanel getDataTabPanel;
     private javax.swing.JLabel getLabel;
     private javax.swing.JLabel headerLabel;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JScrollPane jScrollPane1;

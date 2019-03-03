@@ -5,12 +5,13 @@
  */
 package myMovies;
 
-import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.swing.DefaultListModel;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -19,10 +20,19 @@ import javax.swing.JOptionPane;
 public class NewFavouriteListJDialog extends javax.swing.JDialog {
 
     FavoriteListJpaController favoriteListController;
+    JList<String> allFavoritesList;
 
     /**
      * Creates new form NewFavouriteListJDialog
      */
+    public NewFavouriteListJDialog(java.awt.Frame parent, boolean modal, JList<String> model) {
+        super(parent, modal);
+        this.allFavoritesList = model;
+        initComponents();
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("MyMoviesProjectPU");
+        this.favoriteListController = new FavoriteListJpaController(emf);
+    }
+
     public NewFavouriteListJDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
@@ -110,6 +120,10 @@ public class NewFavouriteListJDialog extends javax.swing.JDialog {
             FavoriteList favoriteList = new FavoriteList();
             favoriteList.setName(listName);
             this.favoriteListController.create(favoriteList);
+            DefaultListModel lm = new DefaultListModel<>();
+            favoriteListList = this.favoriteListController.findFavoriteListEntities();
+            favoriteListList.forEach(fv -> lm.addElement(fv.getName()));
+            this.allFavoritesList.setModel(lm);
             this.dispose();
         }
     }//GEN-LAST:event_jButton1ActionPerformed

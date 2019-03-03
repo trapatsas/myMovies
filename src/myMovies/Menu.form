@@ -642,16 +642,11 @@
                                       <Component id="jScrollPane3" min="-2" pref="502" max="-2" attributes="0"/>
                                   </Group>
                                   <Group type="102" attributes="0">
-                                      <Group type="103" groupAlignment="0" attributes="0">
-                                          <Group type="102" alignment="0" attributes="0">
-                                              <Component id="createButton" min="-2" max="-2" attributes="0"/>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="editListButton" min="-2" max="-2" attributes="0"/>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="createButton2" min="-2" max="-2" attributes="0"/>
-                                          </Group>
-                                          <Component id="jButton1" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      </Group>
+                                      <Component id="createButton" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="editListButton" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="deleteButton" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                                   </Group>
                               </Group>
@@ -665,16 +660,14 @@
                               <Group type="103" groupAlignment="3" attributes="0">
                                   <Component id="createButton" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="editListButton" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="createButton2" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="deleteButton" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Component id="jScrollPane3" pref="429" max="32767" attributes="0"/>
+                                  <Component id="jScrollPane3" max="32767" attributes="0"/>
                                   <Component id="jScrollPane2" max="32767" attributes="0"/>
                               </Group>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jButton1" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace pref="14" max="32767" attributes="0"/>
+                              <EmptySpace pref="58" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -737,21 +730,13 @@
                         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="editListButtonActionPerformed"/>
                       </Events>
                     </Component>
-                    <Component class="javax.swing.JButton" name="createButton2">
+                    <Component class="javax.swing.JButton" name="deleteButton">
                       <Properties>
                         <Property name="text" type="java.lang.String" value="&#x394;&#x3b9;&#x3b1;&#x3b3;&#x3c1;&#x3b1;&#x3c6;&#x3ae;"/>
                         <Property name="toolTipText" type="java.lang.String" value=""/>
                       </Properties>
                       <Events>
-                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="createButton2ActionPerformed"/>
-                      </Events>
-                    </Component>
-                    <Component class="javax.swing.JButton" name="jButton1">
-                      <Properties>
-                        <Property name="text" type="java.lang.String" value="&#x395;&#x3bd;&#x3b7;&#x3bc;&#x3ad;&#x3c1;&#x3c9;&#x3c3;&#x3b7; &#x39b;&#x3af;&#x3c3;&#x3c4;&#x3b1;&#x3c2;"/>
-                      </Properties>
-                      <Events>
-                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton1ActionPerformed"/>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="deleteButtonActionPerformed"/>
                       </Events>
                     </Component>
                   </SubComponents>
