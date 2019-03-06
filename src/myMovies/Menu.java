@@ -10,6 +10,9 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.Vector;
@@ -18,8 +21,11 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.persistence.Column;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.persistence.Query;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JDialog;
@@ -44,6 +50,7 @@ public class Menu extends javax.swing.JFrame {
     FavoriteListJpaController favoriteListJpaController;
     MovieJpaController movieJpaController;
     GenreJpaController genreJpaController;
+    EntityManager entityManager;
 
     /**
      * Creates new form Menu
@@ -51,9 +58,11 @@ public class Menu extends javax.swing.JFrame {
     public Menu() {
         initComponents();
         EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("MyMoviesProjectPU");
+        this.entityManager = entityManagerFactory.createEntityManager();
         this.favoriteListJpaController = new FavoriteListJpaController(entityManagerFactory);
         this.movieJpaController = new MovieJpaController(entityManagerFactory);
         this.genreJpaController = new GenreJpaController(entityManagerFactory);
+
     }
 
     /**
@@ -120,6 +129,10 @@ public class Menu extends javax.swing.JFrame {
         jSeparator3 = new javax.swing.JSeparator();
         jSeparator4 = new javax.swing.JSeparator();
         statsTabPanel = new javax.swing.JPanel();
+        bestMoviesButton1 = new javax.swing.JButton();
+        bestMoviesButton2 = new javax.swing.JButton();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        statsTable1 = new javax.swing.JTable();
         aboutTabPanel = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         aboutPaneTextArea = new javax.swing.JTextArea();
@@ -629,7 +642,7 @@ public class Menu extends javax.swing.JFrame {
                             .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(18, 18, 18)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 495, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(10, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         searchTabPanelLayout.setVerticalGroup(
             searchTabPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -671,15 +684,59 @@ public class Menu extends javax.swing.JFrame {
 
         statsTabPanel.setBackground(new java.awt.Color(108, 88, 141));
 
+        bestMoviesButton1.setText("Οι Καλύτερες 10 Ταινίες");
+        bestMoviesButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bestMoviesButton1ActionPerformed(evt);
+            }
+        });
+
+        bestMoviesButton2.setText("Οι Καλύτερες Ταινίες ανά Λίστα");
+        bestMoviesButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bestMoviesButton2ActionPerformed(evt);
+            }
+        });
+
+        statsTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2"
+            }
+        ));
+        jScrollPane5.setViewportView(statsTable1);
+
         javax.swing.GroupLayout statsTabPanelLayout = new javax.swing.GroupLayout(statsTabPanel);
         statsTabPanel.setLayout(statsTabPanelLayout);
         statsTabPanelLayout.setHorizontalGroup(
             statsTabPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 810, Short.MAX_VALUE)
+            .addGroup(statsTabPanelLayout.createSequentialGroup()
+                .addGap(18, 18, 18)
+                .addGroup(statsTabPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(bestMoviesButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(bestMoviesButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(82, 82, 82)
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 502, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(31, Short.MAX_VALUE))
         );
         statsTabPanelLayout.setVerticalGroup(
             statsTabPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 525, Short.MAX_VALUE)
+            .addGroup(statsTabPanelLayout.createSequentialGroup()
+                .addGroup(statsTabPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(statsTabPanelLayout.createSequentialGroup()
+                        .addGap(169, 169, 169)
+                        .addComponent(bestMoviesButton1)
+                        .addGap(44, 44, 44)
+                        .addComponent(bestMoviesButton2))
+                    .addGroup(statsTabPanelLayout.createSequentialGroup()
+                        .addGap(20, 20, 20)
+                        .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 385, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(120, Short.MAX_VALUE))
         );
 
         cardPanel.add(statsTabPanel, "card5");
@@ -1080,6 +1137,73 @@ public class Menu extends javax.swing.JFrame {
         searchResultTable.setModel(defTableModel);
     }//GEN-LAST:event_clearΙnputsButtonActionPerformed
 
+    private void bestMoviesButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bestMoviesButton1ActionPerformed
+        // αφορά το button που επιστρέφει τις δέκα (10) καλύτερες βάση βαθμολογίας ταινίες//
+
+        List<Movie> topMovies = this.movieJpaController.findMovieEntities();
+        Collections.sort(topMovies, Collections.reverseOrder(Comparator.comparing(Movie::getRating)));
+        List<Movie> topTenMovies = topMovies.subList(0, 10);
+
+        //bestMoviesModel
+        DefaultTableModel bestMoviesModel = new DefaultTableModel();
+        bestMoviesModel.setColumnIdentifiers(new String[]{"Τίτλος ταινίας", "Βαθμολογία"});
+
+        //for loop στην λίστα και πρόσθεση των ταινιών στο model μου
+        for (Movie movie : topTenMovies) {
+            String rating = Float.toString(movie.getRating());
+            bestMoviesModel.addRow(new String[]{movie.getTitle(), rating});
+        }
+        //εμφάνιση του ΤΑΒLE 
+        statsTable1.setModel(bestMoviesModel);
+
+    }//GEN-LAST:event_bestMoviesButton1ActionPerformed
+
+    private void bestMoviesButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bestMoviesButton2ActionPerformed
+
+        //  αφορά το button που επιστρέφει τις καλύτερες ταινίες ανα λίστα//
+        // κάνω select όλες τις ταινίες οι οποίες ανήκουν σε favorite list, τις ταξινομώ κατά βαθμολογία και τις εισάγω σε λίστα
+        Query queryMovies = entityManager.createQuery("SELECT m FROM Movie m WHERE m.favoriteListId IS NOT NULL ORDER BY m.rating DESC");
+        List<Movie> movies = queryMovies.getResultList();
+
+        // κάνω select όλες τις favorite list και τις εισάγω σε λίστα
+        Query queryMovies2 = entityManager.createQuery("SELECT f FROM FavoriteList f");
+        List<FavoriteList> favoriteList = queryMovies2.getResultList();
+
+        // bestMoviesModel2
+        DefaultTableModel bestMoviesModel2 = new DefaultTableModel();
+        bestMoviesModel2.setColumnIdentifiers(new String[]{"Λίστα αγαπημένων", "Τίτλος ταινίας"});
+
+        /* επειδή η λίστα των ταινιών είναι ήδη ταξινομημένη κατα βαθμολογία 
+           θα κάνω iterate την λίστα των ταινιών θα επιλέγω την πρώτη ταινιά
+           ανά favoriteListId (η οποία θα είναι σίγουρα και αυτή με τη μεγαλύτερη
+           βαθμολογία λόγω της ταξινομησής μασ
+         */
+        //for loop για το favoriteListId
+        for (int i = 1; i < favoriteList.size() + 1; i++) {
+
+            //for loop για τις ταινίες  
+            for (Movie movie : movies) {
+                //Βρίσκω τις ταινίες με την υψηλότερη βαθμολογία από κάθε λίστα αγαπημένων
+
+                //απο ΙΝΤΕGER->int//
+                int x = movie.getFavoriteListId().getId();
+
+                if (x == i) {
+
+                    //αποηκεύω όνομα λίστας αγαπημένων
+                    String favoriteListName = movie.getFavoriteListId().getName();
+                    // εμφανίζω το table πρώτη στήλη το όνομα της favorite list και δεύτερη το όνομα της ταινιας)
+                    bestMoviesModel2.addRow(new String[]{favoriteListName, movie.getTitle()});
+                    break;
+                }
+            }
+        }
+        //Ενημερώνω τo jTable2 & Κρύβω την στήλη Βαθμολογία
+        statsTable1.setModel(bestMoviesModel2);
+
+
+    }//GEN-LAST:event_bestMoviesButton2ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -1131,6 +1255,8 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JPanel aboutTabPanel;
     private javax.swing.JComboBox<String> addToListComboBox;
     private javax.swing.JList<String> allFavoritesList;
+    private javax.swing.JButton bestMoviesButton1;
+    private javax.swing.JButton bestMoviesButton2;
     private javax.swing.JPanel bgPanel;
     private javax.swing.JPanel cardPanel;
     private javax.swing.JButton clearΙnputsButton;
@@ -1161,6 +1287,7 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
@@ -1172,6 +1299,7 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JPanel sidebarPanel;
     private javax.swing.JLabel statsLabel;
     private javax.swing.JPanel statsTabPanel;
+    private javax.swing.JTable statsTable1;
     private javax.swing.JPanel topPanel;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
