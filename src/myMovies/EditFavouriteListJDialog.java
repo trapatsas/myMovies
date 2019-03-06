@@ -6,6 +6,8 @@
 package myMovies;
 
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.swing.DefaultListModel;
@@ -16,30 +18,38 @@ import javax.swing.JOptionPane;
  *
  * @author trapatsas
  */
-public class NewFavouriteListJDialog extends javax.swing.JDialog {
+public class EditFavouriteListJDialog extends javax.swing.JDialog {
 
     FavoriteListJpaController favoriteListController;
     JList<String> allFavoritesList;
+    FavoriteList oldList;
 
     /**
      * Creates new form NewFavouriteListJDialog
+     *
      * @param parent
      * @param modal
      * @param model
      */
-    public NewFavouriteListJDialog(java.awt.Frame parent, boolean modal, JList<String> model) {
+    public EditFavouriteListJDialog(java.awt.Frame parent, boolean modal, JList<String> model) {
         super(parent, modal);
         this.allFavoritesList = model;
         initComponents();
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("MyMoviesProjectPU");
         this.favoriteListController = new FavoriteListJpaController(emf);
+        String oldName = allFavoritesList.getSelectedValue();
+        oldList = this.favoriteListController.findFavoriteListEntities().stream().filter(fl -> fl.getName().equals(oldName)).findFirst().get();
+        createFavListTextField.setText(oldName);
     }
 
-    public NewFavouriteListJDialog(java.awt.Frame parent, boolean modal) {
+    public EditFavouriteListJDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("MyMoviesProjectPU");
         this.favoriteListController = new FavoriteListJpaController(emf);
+        String oldName = allFavoritesList.getSelectedValue();
+        oldList = this.favoriteListController.findFavoriteListEntities().stream().filter(fl -> fl.getName().equals(oldName)).findFirst().get();
+        createFavListTextField.setText(oldName);
     }
 
     /**
@@ -59,7 +69,7 @@ public class NewFavouriteListJDialog extends javax.swing.JDialog {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Νέα Λίστα Αγαπημένων");
 
-        jButton1.setText("Δημιουργία");
+        jButton1.setText("Αλλαγή");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
@@ -73,7 +83,7 @@ public class NewFavouriteListJDialog extends javax.swing.JDialog {
             }
         });
 
-        jLabel1.setText("Δώστε το όνομα της νέας λίστας:");
+        jLabel1.setText("Αλλάξτε το όνομα της λίστας:");
 
         createFavListTextField.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
         createFavListTextField.setToolTipText("");
@@ -119,14 +129,19 @@ public class NewFavouriteListJDialog extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(null, "Μη αποδεκτό όνομα λίστας!", "ΠΡΟΣΟΧΗ", JOptionPane.WARNING_MESSAGE);
         } else {
 
-            FavoriteList favoriteList = new FavoriteList();
-            favoriteList.setName(listName);
-            this.favoriteListController.create(favoriteList);
-            DefaultListModel lm = new DefaultListModel<>();
-            favoriteListList = this.favoriteListController.findFavoriteListEntities();
-            favoriteListList.forEach(fv -> lm.addElement(fv.getName()));
-            this.allFavoritesList.setModel(lm);
-            this.dispose();
+            
+            try {
+                oldList.setName(listName);
+                this.favoriteListController.edit(oldList);
+                
+                DefaultListModel lm = new DefaultListModel<>();
+                favoriteListList = this.favoriteListController.findFavoriteListEntities();
+                favoriteListList.forEach(fv -> lm.addElement(fv.getName()));
+                this.allFavoritesList.setModel(lm);
+                this.dispose();
+            } catch (Exception ex) {
+                Logger.getLogger(EditFavouriteListJDialog.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -151,20 +166,21 @@ public class NewFavouriteListJDialog extends javax.swing.JDialog {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(NewFavouriteListJDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(EditFavouriteListJDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(NewFavouriteListJDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(EditFavouriteListJDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(NewFavouriteListJDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(EditFavouriteListJDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(NewFavouriteListJDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(EditFavouriteListJDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                NewFavouriteListJDialog dialog = new NewFavouriteListJDialog(new javax.swing.JFrame(), true);
+                EditFavouriteListJDialog dialog = new EditFavouriteListJDialog(new javax.swing.JFrame(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {

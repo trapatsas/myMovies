@@ -79,7 +79,8 @@ public class ExtractedData {
                 JsonArray nextPageMovieResults = nextPageResults.getJsonArray("results");
                 saveMovieResults(nextPageMovieResults, logArea);
                 current_page++;
-            } while (current_page < Math.min(total_pages, 13));
+            } while (current_page < Math.min(total_pages, 37));
+            Thread.sleep(11000);
 
         }
     }
