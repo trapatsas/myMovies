@@ -1149,10 +1149,11 @@ public class Menu extends javax.swing.JFrame {
         bestMoviesModel.setColumnIdentifiers(new String[]{"Τίτλος ταινίας", "Βαθμολογία"});
 
         //for loop στην λίστα και πρόσθεση των ταινιών στο model μου
-        for (Movie movie : topTenMovies) {
-            String rating = Float.toString(movie.getRating());
-            bestMoviesModel.addRow(new String[]{movie.getTitle(), rating});
-        }
+        topTenMovies.forEach(movie
+                -> bestMoviesModel.addRow(
+                        new String[]{movie.getTitle(), Float.toString(movie.getRating())}
+                )
+        );
         //εμφάνιση του ΤΑΒLE 
         statsTable1.setModel(bestMoviesModel);
 
