@@ -8,38 +8,31 @@ package myMovies;
 import java.awt.Color;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
-import javax.persistence.Column;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import javax.persistence.Query;
-import javax.swing.ComboBoxModel;
 import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
-import javax.swing.ListModel;
 import javax.swing.RowSorter;
 import javax.swing.SortOrder;
 import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
-import myMovies.exceptions.NonexistentEntityException;
 
 /**
  *
@@ -51,11 +44,18 @@ public class Menu extends javax.swing.JFrame {
     MovieJpaController movieJpaController;
     GenreJpaController genreJpaController;
     EntityManager entityManager;
+    ImagePanel bgImagePanel;
+    private final String stringNoFavoriteList;
+    private static final String IMG_PATH = "src/myMovies/images/dvd_store.png";
+    ItemListener selectListListener;
 
     /**
      * Creates new form Menu
+     *
+     * @throws java.io.IOException
      */
-    public Menu() {
+    public Menu() throws IOException {
+        this.stringNoFavoriteList = "Καμία";
         initComponents();
         EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("MyMoviesProjectPU");
         this.entityManager = entityManagerFactory.createEntityManager();
@@ -63,6 +63,46 @@ public class Menu extends javax.swing.JFrame {
         this.movieJpaController = new MovieJpaController(entityManagerFactory);
         this.genreJpaController = new GenreJpaController(entityManagerFactory);
 
+        this.selectListListener = (ItemEvent e) -> {
+
+            if (addToListComboBox.getSelectedItem() != null && searchResultTable.getRowCount() > 0) {
+
+                try {
+                    Object selectedValue = searchResultTable.getValueAt(searchResultTable.getSelectedRow(), 4);
+                    String selectedList = addToListComboBox.getSelectedItem().toString();
+                    int movieId = Integer.parseInt(selectedValue.toString());
+
+                    Movie selectedMovie = movieJpaController.findMovie(movieId);
+
+                    FavoriteList favoriteList = null;
+
+                    if (addToListComboBox.getSelectedItem() != null && !stringNoFavoriteList.equals(selectedList)) {
+
+                        favoriteList = favoriteListJpaController.findFavoriteListEntities().stream().filter(
+                                fl -> fl.getName().equals(selectedList)
+                        ).findFirst().get();
+
+                    }
+
+                    selectedMovie.setFavoriteListId(favoriteList);
+
+                    movieJpaController.edit(selectedMovie);
+
+                    searchResultTable.setValueAt(favoriteList == null ? stringNoFavoriteList : favoriteList.getName(), searchResultTable.getSelectedRow(), 3);
+
+                } catch (Exception ex) {
+                    Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        };
+
+        getDataLogArea.setVisible(false);
+
+        BufferedImage bgPicture;
+        bgImagePanel = new ImagePanel(new ImageIcon(IMG_PATH).getImage());
+        getDataTabPanel.add(bgImagePanel);
+        getDataTabPanel.revalidate();
+        getDataTabPanel.repaint();
     }
 
     /**
@@ -129,15 +169,16 @@ public class Menu extends javax.swing.JFrame {
         jSeparator3 = new javax.swing.JSeparator();
         jSeparator4 = new javax.swing.JSeparator();
         statsTabPanel = new javax.swing.JPanel();
-        bestMoviesButton1 = new javax.swing.JButton();
-        bestMoviesButton2 = new javax.swing.JButton();
-        jScrollPane5 = new javax.swing.JScrollPane();
+        top10MoviesButton = new javax.swing.JButton();
+        bestMoviePerListButton = new javax.swing.JButton();
+        bestMoviesScrollPane = new javax.swing.JScrollPane();
         statsTable1 = new javax.swing.JTable();
         aboutTabPanel = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         aboutPaneTextArea = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setAutoRequestFocus(false);
         setBackground(new java.awt.Color(108, 88, 141));
         setLocationByPlatform(true);
 
@@ -269,11 +310,11 @@ public class Menu extends javax.swing.JFrame {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 statsLabelMouseClicked(evt);
             }
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                statsLabelMouseEntered(evt);
-            }
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 statsLabelMouseExited(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                statsLabelMouseEntered(evt);
             }
         });
 
@@ -615,7 +656,7 @@ public class Menu extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(searchTabPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(addToListComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(searchTabPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(searchTabPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(searchTabPanelLayout.createSequentialGroup()
                             .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -628,21 +669,18 @@ public class Menu extends javax.swing.JFrame {
                                 .addComponent(GenreSearchComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(jLabel2)
                                 .addComponent(YearSearchTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jLabel1)))
-                        .addGroup(searchTabPanelLayout.createSequentialGroup()
-                            .addGap(10, 10, 10)
-                            .addGroup(searchTabPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(searchMoviesButton)
-                                .addComponent(clearΙnputsButton)))
+                                .addComponent(jLabel1)
+                                .addComponent(searchMoviesButton, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(clearΙnputsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGroup(searchTabPanelLayout.createSequentialGroup()
                             .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                             .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(18, 18, 18)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 495, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(10, Short.MAX_VALUE))
         );
         searchTabPanelLayout.setVerticalGroup(
             searchTabPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -684,17 +722,18 @@ public class Menu extends javax.swing.JFrame {
 
         statsTabPanel.setBackground(new java.awt.Color(108, 88, 141));
 
-        bestMoviesButton1.setText("Οι Καλύτερες 10 Ταινίες");
-        bestMoviesButton1.addActionListener(new java.awt.event.ActionListener() {
+        top10MoviesButton.setText("Οι 10 Καλύτερες Ταινίες");
+        top10MoviesButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                bestMoviesButton1ActionPerformed(evt);
+                top10MoviesButtonActionPerformed(evt);
             }
         });
 
-        bestMoviesButton2.setText("Οι Καλύτερες Ταινίες ανά Λίστα");
-        bestMoviesButton2.addActionListener(new java.awt.event.ActionListener() {
+        bestMoviePerListButton.setText("Οι Καλύτερες Ταινίες ανά Λίστα");
+        bestMoviePerListButton.setToolTipText("");
+        bestMoviePerListButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                bestMoviesButton2ActionPerformed(evt);
+                bestMoviePerListButtonActionPerformed(evt);
             }
         });
 
@@ -706,37 +745,35 @@ public class Menu extends javax.swing.JFrame {
                 {null, null}
             },
             new String [] {
-                "Title 1", "Title 2"
+                "Τίτλος ταινίας", "Βαθμολογία"
             }
         ));
-        jScrollPane5.setViewportView(statsTable1);
+        bestMoviesScrollPane.setViewportView(statsTable1);
 
         javax.swing.GroupLayout statsTabPanelLayout = new javax.swing.GroupLayout(statsTabPanel);
         statsTabPanel.setLayout(statsTabPanelLayout);
         statsTabPanelLayout.setHorizontalGroup(
             statsTabPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(statsTabPanelLayout.createSequentialGroup()
-                .addGap(18, 18, 18)
+                .addGap(102, 102, 102)
                 .addGroup(statsTabPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(bestMoviesButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(bestMoviesButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(82, 82, 82)
-                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 502, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(31, Short.MAX_VALUE))
+                    .addComponent(bestMoviesScrollPane)
+                    .addGroup(statsTabPanelLayout.createSequentialGroup()
+                        .addComponent(top10MoviesButton, javax.swing.GroupLayout.PREFERRED_SIZE, 243, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(bestMoviePerListButton, javax.swing.GroupLayout.PREFERRED_SIZE, 266, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(181, Short.MAX_VALUE))
         );
         statsTabPanelLayout.setVerticalGroup(
             statsTabPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(statsTabPanelLayout.createSequentialGroup()
-                .addGroup(statsTabPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(statsTabPanelLayout.createSequentialGroup()
-                        .addGap(169, 169, 169)
-                        .addComponent(bestMoviesButton1)
-                        .addGap(44, 44, 44)
-                        .addComponent(bestMoviesButton2))
-                    .addGroup(statsTabPanelLayout.createSequentialGroup()
-                        .addGap(20, 20, 20)
-                        .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 385, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(120, Short.MAX_VALUE))
+                .addGap(49, 49, 49)
+                .addGroup(statsTabPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(bestMoviePerListButton, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(top10MoviesButton, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(bestMoviesScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 391, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(22, Short.MAX_VALUE))
         );
 
         cardPanel.add(statsTabPanel, "card5");
@@ -750,10 +787,10 @@ public class Menu extends javax.swing.JFrame {
         aboutPaneTextArea.setEditable(false);
         aboutPaneTextArea.setBackground(new java.awt.Color(108, 88, 141));
         aboutPaneTextArea.setColumns(20);
-        aboutPaneTextArea.setFont(new java.awt.Font("Cambria", 0, 18)); // NOI18N
+        aboutPaneTextArea.setFont(new java.awt.Font("American Typewriter", 0, 18)); // NOI18N
         aboutPaneTextArea.setForeground(new java.awt.Color(255, 255, 255));
         aboutPaneTextArea.setRows(5);
-        aboutPaneTextArea.setText("Η εφαρμογή αυτή δημιουργήθηκε από τους φοιτητές \ni) Παναγιώτη Τραπατσα\nii) Αποστολη Νταλαμπιρα και \niii) Δημήτρη Τομπέα\nστα πλαίσια της 3ης ομαδικής εργασίας για την ΠΛΗ24,\nμε επιβλέπων καθηγητή τον κ. Φιτσιλή Παναγιώτη\n");
+        aboutPaneTextArea.setText("Η εφαρμογή αυτή δημιουργήθηκε από τους φοιτητές \ni) Παναγιώτη Τραπάτσα\nii) Αποστόλη Νταλαμπίρα και \niii) Δημήτρη Τομπέα\nστα πλαίσια της 3ης ομαδικής εργασίας για την ΠΛΗ24,\nμε επιβλέπων καθηγητή τον κ. Φιτσιλή Παναγιώτη\n");
         aboutPaneTextArea.setBorder(null);
         jScrollPane1.setViewportView(aboutPaneTextArea);
 
@@ -761,17 +798,17 @@ public class Menu extends javax.swing.JFrame {
         aboutTabPanel.setLayout(aboutTabPanelLayout);
         aboutTabPanelLayout.setHorizontalGroup(
             aboutTabPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(aboutTabPanelLayout.createSequentialGroup()
-                .addGap(37, 37, 37)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 612, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(161, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, aboutTabPanelLayout.createSequentialGroup()
+                .addContainerGap(175, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 629, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         aboutTabPanelLayout.setVerticalGroup(
             aboutTabPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(aboutTabPanelLayout.createSequentialGroup()
-                .addGap(68, 68, 68)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 233, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(224, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, aboutTabPanelLayout.createSequentialGroup()
+                .addContainerGap(146, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(144, 144, 144))
         );
 
         cardPanel.add(aboutTabPanel, "card6");
@@ -798,11 +835,17 @@ public class Menu extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(bgPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(bgPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(bgPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(bgPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         bindingGroup.bind();
@@ -810,155 +853,125 @@ public class Menu extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void exitLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_exitLabelMouseClicked
-        System.exit(0);
-    }//GEN-LAST:event_exitLabelMouseClicked
+    private void bestMoviePerListButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bestMoviePerListButtonActionPerformed
 
-    private void exitLabelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_exitLabelMouseEntered
-        ExitPanel.setBackground(new Color(108, 88, 141));
-    }//GEN-LAST:event_exitLabelMouseEntered
+        List<Movie> topMovies = this.movieJpaController.findMovieEntities();
+        Collections.sort(topMovies, Collections.reverseOrder(Comparator.comparing(Movie::getRating)));
 
-    private void exitLabelMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_exitLabelMouseExited
-        ExitPanel.setBackground(new Color(85, 55, 118));
-    }//GEN-LAST:event_exitLabelMouseExited
+        List<FavoriteList> favoriteLists = favoriteListJpaController.findFavoriteListEntities();
 
-    private void searchLabelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_searchLabelMouseEntered
-        SearchPanel.setBackground(new Color(108, 88, 141));
-    }//GEN-LAST:event_searchLabelMouseEntered
+        DefaultTableModel bestMoviesModel2 = new DefaultTableModel();
+        bestMoviesModel2.setColumnIdentifiers(new String[]{"Λίστα αγαπημένων", "Τίτλος ταινίας"});
 
-    private void searchLabelMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_searchLabelMouseExited
-        SearchPanel.setBackground(new Color(85, 55, 118));
-    }//GEN-LAST:event_searchLabelMouseExited
-
-    private void getLabelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_getLabelMouseEntered
-        GetMoviesPanel.setBackground(new Color(108, 88, 141));
-    }//GEN-LAST:event_getLabelMouseEntered
-
-    private void getLabelMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_getLabelMouseExited
-        GetMoviesPanel.setBackground(new Color(85, 55, 118));
-    }//GEN-LAST:event_getLabelMouseExited
-
-    private void favLabelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_favLabelMouseEntered
-        FavouritePanel.setBackground(new Color(108, 88, 141));
-    }//GEN-LAST:event_favLabelMouseEntered
-
-    private void favLabelMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_favLabelMouseExited
-        FavouritePanel.setBackground(new Color(85, 55, 118));
-    }//GEN-LAST:event_favLabelMouseExited
-
-    private void statsLabelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_statsLabelMouseEntered
-        StatsPanel.setBackground(new Color(108, 88, 141));
-    }//GEN-LAST:event_statsLabelMouseEntered
-
-    private void statsLabelMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_statsLabelMouseExited
-        StatsPanel.setBackground(new Color(85, 55, 118));
-    }//GEN-LAST:event_statsLabelMouseExited
-
-    private void aboutLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_aboutLabelMouseClicked
-        headerLabel.setText(aboutLabel.getText());
-        cardPanel.removeAll();
-        cardPanel.add(aboutTabPanel);
-        cardPanel.repaint();
-        cardPanel.revalidate();
-    }//GEN-LAST:event_aboutLabelMouseClicked
-
-    private void aboutLabelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_aboutLabelMouseEntered
-        AboutPanel.setBackground(new Color(108, 88, 141));
-    }//GEN-LAST:event_aboutLabelMouseEntered
-
-    private void aboutLabelMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_aboutLabelMouseExited
-        AboutPanel.setBackground(new Color(85, 55, 118));
-    }//GEN-LAST:event_aboutLabelMouseExited
-
-    private void getLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_getLabelMouseClicked
-        headerLabel.setText(getLabel.getText());
-        cardPanel.removeAll();
-        cardPanel.add(getDataTabPanel);
-        cardPanel.repaint();
-        cardPanel.revalidate();
-
-        ExtractedData importData = new ExtractedData(getDataLogTextArea);
-        importData.deleteDataBase();
-        getDataLogTextArea.append("Η ΔΙΑΓΡΑΦΗ ΤΗΣ ΒΑΣΗΣ ΟΛΟΚΛΗΡΩΘΗΚΕ!" + "\n\n");
-        JOptionPane.showMessageDialog(null, "Η ΔΙΑΓΡΑΦΗ ΤΗΣ ΒΑΣΗΣ ΟΛΟΚΛΗΡΩΘΗΚΕ!", "ΠΛΗΡΟΦΟΡΙΑ", JOptionPane.WARNING_MESSAGE);
-        try {
-            importData.fillGenreTable();
-            getDataLogTextArea.append("Ολοκληρώθηκε η εισαγωγή τιμών στον πίνακα Genre!" + "\n\n");
-            JOptionPane.showMessageDialog(null, "Ολοκληρώθηκε η εισαγωγή τιμών στον πίνακα Genre!", "ΠΛΗΡΟΦΟΡΙΑ", JOptionPane.WARNING_MESSAGE);
-        } catch (Exception ex) {
-            getDataLogTextArea.append(ex.getMessage() + "\n\n");
-            ex.printStackTrace();
+        for (Movie m : topMovies) {
+            if (favoriteLists.contains(m.getFavoriteListId())) {
+                favoriteLists.remove(m.getFavoriteListId());
+                bestMoviesModel2.addRow(new String[]{m.getFavoriteListId().getName(), m.getTitle()});
+            }
+            if (favoriteLists.isEmpty()) {
+                break;
+            }
         }
+        statsTable1.setModel(bestMoviesModel2);
+    }//GEN-LAST:event_bestMoviePerListButtonActionPerformed
 
-        try {
-            JOptionPane.showMessageDialog(null, "Ξεκινάει η εισαγωγή ταινιών!", "ΠΛΗΡΟΦΟΡΙΑ", JOptionPane.WARNING_MESSAGE);
-            importData.fillMovieTable();
-            getDataLogTextArea.append("Ολοκληρώθηκε η εισαγωγή τιμών στον πίνακα Movie!" + "\n\n");
-        } catch (Exception ex) {
-            getDataLogTextArea.append(ex.getMessage() + "\n\n");
-            ex.printStackTrace();
-        }
+    private void top10MoviesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_top10MoviesButtonActionPerformed
+        // αφορά το button που επιστρέφει τις δέκα (10) καλύτερες βάση βαθμολογίας ταινίες//
 
-        JOptionPane.showMessageDialog(null, " Η ανάκτηση των δεδομένων ολοκληρώθηκε!", "ΠΛΗΡΟΦΟΡΙΑ", JOptionPane.WARNING_MESSAGE);
+        List<Movie> topMovies = this.movieJpaController.findMovieEntities();
+        Collections.sort(topMovies, Collections.reverseOrder(Comparator.comparing(Movie::getRating)));
+        List<Movie> topTenMovies = topMovies.subList(0, 10);
 
-    }//GEN-LAST:event_getLabelMouseClicked
+        //bestMoviesModel
+        DefaultTableModel bestMoviesModel = new DefaultTableModel();
+        bestMoviesModel.setColumnIdentifiers(new String[]{"Τίτλος ταινίας", "Βαθμολογία"});
 
-    private void favLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_favLabelMouseClicked
-        headerLabel.setText(favLabel.getText());
-        cardPanel.removeAll();
-        cardPanel.add(favouriteTabPanel);
-        cardPanel.repaint();
-        cardPanel.revalidate();
-    }//GEN-LAST:event_favLabelMouseClicked
+        //for loop στην λίστα και πρόσθεση των ταινιών στο model μου
+        topTenMovies.forEach(movie
+                -> bestMoviesModel.addRow(
+                        new String[]{movie.getTitle(), Float.toString(movie.getRating())}
+                )
+        );
+        //εμφάνιση του ΤΑΒLE
+        statsTable1.setModel(bestMoviesModel);
+    }//GEN-LAST:event_top10MoviesButtonActionPerformed
 
-    private void searchLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_searchLabelMouseClicked
-        headerLabel.setText(searchLabel.getText());
-        cardPanel.removeAll();
-        cardPanel.add(searchTabPanel);
-        cardPanel.repaint();
-        cardPanel.revalidate();
+    private void clearΙnputsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearΙnputsButtonActionPerformed
+        GenreSearchComboBox.removeAllItems();
+        GenreSearchComboBox.addItem("Είδος");
+        GenreSearchComboBox.addItem("Action");
+        GenreSearchComboBox.addItem("Romance");
+        GenreSearchComboBox.addItem("Science Fiction");
+        GenreSearchComboBox.setSelectedIndex(0);
 
-        addToListComboBox.removeAllItems();
-        addToListComboBox.addItem("Καμία");
-        this.favoriteListJpaController.findFavoriteListEntities().forEach((favoriteList) -> {
-            addToListComboBox.addItem(favoriteList.getName());
+        YearSearchTextField.setText("Έτος");
+
+        DefaultTableModel defTableModel = new DefaultTableModel();
+
+        searchResultTable.setModel(defTableModel);
+    }//GEN-LAST:event_clearΙnputsButtonActionPerformed
+
+    private void searchMoviesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchMoviesButtonActionPerformed
+        // TODO add your handling code here:
+        String selectedYear = YearSearchTextField.getText();
+        String selectedGenre = GenreSearchComboBox.getSelectedItem().toString();
+
+        List<Movie> movieList = this.movieJpaController.findMovieEntities();
+
+        SimpleDateFormat yearDateFormat = new SimpleDateFormat("yyyy");
+
+        // Names of columns
+        Vector<String> columnNames = new Vector<>();
+        columnNames.add("Τίτλος ταινίας");
+        columnNames.add("Βαθμολογία");
+        columnNames.add("Περιγραφή");
+        columnNames.add("Λίστα");
+        columnNames.add("Id");
+
+        // Data of the table
+        Vector<Vector<Object>> data = new Vector<>();
+
+        movieList.stream().filter(
+                movie -> selectedGenre.equals(movie.getGenreId().getName())
+                && selectedYear.equals(yearDateFormat.format(movie.getReleaseDate()))
+        ).map((movie) -> {
+            Vector<Object> vector = new Vector<>();
+            vector.add(movie.getTitle());
+            vector.add(movie.getRating());
+            vector.add(movie.getOverview());
+            vector.add(movie.getFavoriteListId() == null ? stringNoFavoriteList : movie.getFavoriteListId().getName());
+            vector.add(movie.getId());
+            return vector;
+        }).forEachOrdered((vector) -> {
+            data.add(vector);
         });
-        addToListComboBox.setSelectedIndex(0);
 
-    }//GEN-LAST:event_searchLabelMouseClicked
+        DefaultTableModel defTableModel = new DefaultTableModel();
+        defTableModel.setDataVector(data, columnNames);
 
-    private void statsLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_statsLabelMouseClicked
-        headerLabel.setText(statsLabel.getText());
-        cardPanel.removeAll();
-        cardPanel.add(statsTabPanel);
-        cardPanel.repaint();
-        cardPanel.revalidate();
-    }//GEN-LAST:event_statsLabelMouseClicked
+        searchResultTable.setModel(defTableModel);
 
-    private void createButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createButtonActionPerformed
-        NewFavouriteListJDialog sForm = new NewFavouriteListJDialog(null, false, allFavoritesList);
-        sForm.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-        sForm.pack();
-        sForm.setLocationRelativeTo(createButton);
+        TableColumn listCol = searchResultTable.getColumnModel().getColumn(3);
+        TableColumn mIdCol = searchResultTable.getColumnModel().getColumn(4);
 
-        sForm.setVisible(true);
-    }//GEN-LAST:event_createButtonActionPerformed
+        listCol.setMinWidth(0);
+        listCol.setMaxWidth(0);
+        listCol.setResizable(false);
 
-    private void editListButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editListButtonActionPerformed
-        EditFavouriteListJDialog sForm = new EditFavouriteListJDialog(null, false, allFavoritesList);
-        sForm.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-        sForm.pack();
-        sForm.setLocationRelativeTo(createButton);
+        mIdCol.setMinWidth(0);
+        mIdCol.setMaxWidth(0);
+        mIdCol.setResizable(false);
 
-        sForm.setVisible(true);
-    }//GEN-LAST:event_editListButtonActionPerformed
+        TableRowSorter<TableModel> sorter = new TableRowSorter<>(searchResultTable.getModel());
+        searchResultTable.setRowSorter(sorter);
+        List<RowSorter.SortKey> sortKeys = new ArrayList<>(25);
+        sortKeys.add(new RowSorter.SortKey(0, SortOrder.ASCENDING));
+        sorter.setSortKeys(sortKeys);
 
-    public void updateFavouritesList() {
-        List<FavoriteList> favoriteList = this.favoriteListJpaController.findFavoriteListEntities();
-        DefaultListModel lm = new DefaultListModel<>();
-        favoriteList.forEach(fv -> lm.addElement(fv.getName()));
-        allFavoritesList.setModel(lm);
-    }
+        attachSearchTableListener();
+
+        addToListComboBox.addItemListener(selectListListener);
+    }//GEN-LAST:event_searchMoviesButtonActionPerformed
 
     private void deleteListButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteListButtonActionPerformed
         int confirm = JOptionPane.showConfirmDialog(null, "Θέλετε να διαγράψετε τις λίστες οριστικά?", "ΔΙΑΓΡΑΦΗ ΛΙΣΤΩΝ", JOptionPane.YES_NO_OPTION);
@@ -985,6 +998,24 @@ public class Menu extends javax.swing.JFrame {
 
         updateFavouritesList();
     }//GEN-LAST:event_deleteListButtonActionPerformed
+
+    private void editListButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editListButtonActionPerformed
+        EditFavouriteListJDialog sForm = new EditFavouriteListJDialog(null, false, allFavoritesList);
+        sForm.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+        sForm.pack();
+        sForm.setLocationRelativeTo(createButton);
+
+        sForm.setVisible(true);
+    }//GEN-LAST:event_editListButtonActionPerformed
+
+    private void createButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createButtonActionPerformed
+        NewFavouriteListJDialog sForm = new NewFavouriteListJDialog(null, false, allFavoritesList);
+        sForm.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+        sForm.pack();
+        sForm.setLocationRelativeTo(createButton);
+
+        sForm.setVisible(true);
+    }//GEN-LAST:event_createButtonActionPerformed
 
     private void allFavoritesListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_allFavoritesListValueChanged
         if (allFavoritesList.getSelectedValue() != null) {
@@ -1023,68 +1054,156 @@ public class Menu extends javax.swing.JFrame {
             editListButton.setEnabled(false);
             deleteListButton.setEnabled(false);
         }
-
     }//GEN-LAST:event_allFavoritesListValueChanged
 
-    private void searchMoviesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchMoviesButtonActionPerformed
-        // TODO add your handling code here:
-        String selectedYear = YearSearchTextField.getText();
-        String selectedGenre = GenreSearchComboBox.getSelectedItem().toString();
+    private void aboutLabelMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_aboutLabelMouseExited
+        AboutPanel.setBackground(new Color(85, 55, 118));
+    }//GEN-LAST:event_aboutLabelMouseExited
 
-        List<Movie> movieList = this.movieJpaController.findMovieEntities();
+    private void aboutLabelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_aboutLabelMouseEntered
+        AboutPanel.setBackground(new Color(108, 88, 141));
+    }//GEN-LAST:event_aboutLabelMouseEntered
 
-        SimpleDateFormat yearDateFormat = new SimpleDateFormat("yyyy");
+    private void aboutLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_aboutLabelMouseClicked
+        headerLabel.setText(aboutLabel.getText());
+        cardPanel.removeAll();
+        cardPanel.add(aboutTabPanel);
+        cardPanel.repaint();
+        cardPanel.revalidate();
+    }//GEN-LAST:event_aboutLabelMouseClicked
 
-        // Names of columns
-        Vector<String> columnNames = new Vector<String>();
-        columnNames.add("Τίτλος ταινίας");
-        columnNames.add("Βαθμολογία");
-        columnNames.add("Περιγραφή");
-        columnNames.add("Λίστα");
-        columnNames.add("Id");
+    private void exitLabelMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_exitLabelMouseExited
+        ExitPanel.setBackground(new Color(85, 55, 118));
+    }//GEN-LAST:event_exitLabelMouseExited
 
-        // Data of the table
-        Vector<Vector<Object>> data = new Vector<>();
+    private void exitLabelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_exitLabelMouseEntered
+        ExitPanel.setBackground(new Color(108, 88, 141));
+    }//GEN-LAST:event_exitLabelMouseEntered
 
-        movieList.stream().filter(
-                movie -> selectedYear.equals(
-                        yearDateFormat.format(movie.getReleaseDate()).toString())
-                && selectedGenre.equals(movie.getGenreId().getName()
-                )
-        ).map((movie) -> {
-            Vector<Object> vector = new Vector<>();
-            vector.add(movie.getTitle());
-            vector.add(movie.getRating());
-            vector.add(movie.getOverview());
-            vector.add(movie.getFavoriteListId() == null ? "Καμία" : movie.getFavoriteListId().getName());
-            vector.add(movie.getId());
-            return vector;
-        }).forEachOrdered((vector) -> {
-            data.add(vector);
-        });
+    private void exitLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_exitLabelMouseClicked
+        System.exit(0);
+    }//GEN-LAST:event_exitLabelMouseClicked
+
+    private void statsLabelMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_statsLabelMouseExited
+        StatsPanel.setBackground(new Color(85, 55, 118));
+    }//GEN-LAST:event_statsLabelMouseExited
+
+    private void statsLabelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_statsLabelMouseEntered
+        StatsPanel.setBackground(new Color(108, 88, 141));
+    }//GEN-LAST:event_statsLabelMouseEntered
+
+    private void statsLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_statsLabelMouseClicked
+        headerLabel.setText(statsLabel.getText());
+        cardPanel.removeAll();
+        cardPanel.add(statsTabPanel);
+        cardPanel.repaint();
+        cardPanel.revalidate();
+    }//GEN-LAST:event_statsLabelMouseClicked
+
+    private void searchLabelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_searchLabelMouseEntered
+        SearchPanel.setBackground(new Color(108, 88, 141));
+    }//GEN-LAST:event_searchLabelMouseEntered
+
+    private void searchLabelMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_searchLabelMouseExited
+        SearchPanel.setBackground(new Color(85, 55, 118));
+    }//GEN-LAST:event_searchLabelMouseExited
+
+    private void searchLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_searchLabelMouseClicked
+        headerLabel.setText(searchLabel.getText());
+        cardPanel.removeAll();
+        cardPanel.add(searchTabPanel);
+        cardPanel.repaint();
+        cardPanel.revalidate();
+
+        addToListComboBox.removeItemListener(this.selectListListener);
 
         DefaultTableModel defTableModel = new DefaultTableModel();
-        defTableModel.setDataVector(data, columnNames);
+
+        defTableModel.setRowCount(0);
 
         searchResultTable.setModel(defTableModel);
 
-        TableColumn listCol = searchResultTable.getColumnModel().getColumn(3);
-        TableColumn mIdCol = searchResultTable.getColumnModel().getColumn(4);
+        addToListComboBox.removeAllItems();
+        addToListComboBox.addItem(stringNoFavoriteList);
+        this.favoriteListJpaController.findFavoriteListEntities().forEach((favoriteList) -> {
+            addToListComboBox.addItem(favoriteList.getName());
+        });
+        addToListComboBox.setSelectedIndex(0);
+    }//GEN-LAST:event_searchLabelMouseClicked
 
-        listCol.setMinWidth(0);
-        listCol.setMaxWidth(0);
-        listCol.setResizable(false);
+    private void favLabelMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_favLabelMouseExited
+        FavouritePanel.setBackground(new Color(85, 55, 118));
+    }//GEN-LAST:event_favLabelMouseExited
 
-        mIdCol.setMinWidth(0);
-        mIdCol.setMaxWidth(0);
-        mIdCol.setResizable(false);
+    private void favLabelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_favLabelMouseEntered
+        FavouritePanel.setBackground(new Color(108, 88, 141));
+    }//GEN-LAST:event_favLabelMouseEntered
 
-        TableRowSorter<TableModel> sorter = new TableRowSorter<>(searchResultTable.getModel());
-        searchResultTable.setRowSorter(sorter);
-        List<RowSorter.SortKey> sortKeys = new ArrayList<>(25);
-        sortKeys.add(new RowSorter.SortKey(0, SortOrder.ASCENDING));
-        sorter.setSortKeys(sortKeys);
+    private void favLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_favLabelMouseClicked
+        headerLabel.setText(favLabel.getText());
+        cardPanel.removeAll();
+        cardPanel.add(favouriteTabPanel);
+        cardPanel.repaint();
+        cardPanel.revalidate();
+        if (allFavoritesList.getModel().getSize() > 0) {
+            allFavoritesList.setSelectedIndex(0);
+        }
+    }//GEN-LAST:event_favLabelMouseClicked
 
+    private void getLabelMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_getLabelMouseExited
+        GetMoviesPanel.setBackground(new Color(85, 55, 118));
+    }//GEN-LAST:event_getLabelMouseExited
+
+    private void getLabelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_getLabelMouseEntered
+        GetMoviesPanel.setBackground(new Color(108, 88, 141));
+    }//GEN-LAST:event_getLabelMouseEntered
+
+    private void getLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_getLabelMouseClicked
+        headerLabel.setText(getLabel.getText());
+        cardPanel.removeAll();
+        cardPanel.add(getDataTabPanel);
+        cardPanel.repaint();
+        cardPanel.revalidate();
+
+        ExtractedData importData = new ExtractedData(getDataLogTextArea);
+        int confirm = JOptionPane.showConfirmDialog(null, "Θέλετε να διαγράψετε τη βάση?", "ΔΙΑΓΡΑΦΗ ΒΑΣΗΣ", JOptionPane.YES_NO_OPTION);
+
+        if (confirm == 0) {
+            getDataTabPanel.remove(this.bgImagePanel);
+            getDataLogArea.setVisible(true);
+            importData.deleteDataBase();
+            getDataLogTextArea.append("Η ΔΙΑΓΡΑΦΗ ΤΗΣ ΒΑΣΗΣ ΟΛΟΚΛΗΡΩΘΗΚΕ!" + "\n\n");
+            JOptionPane.showMessageDialog(null, "Η ΔΙΑΓΡΑΦΗ ΤΗΣ ΒΑΣΗΣ ΟΛΟΚΛΗΡΩΘΗΚΕ!", "ΠΛΗΡΟΦΟΡΙΑ", JOptionPane.WARNING_MESSAGE);
+            try {
+                importData.fillGenreTable();
+                getDataLogTextArea.append("Ολοκληρώθηκε η εισαγωγή τιμών στον πίνακα Genre!" + "\n\n");
+                JOptionPane.showMessageDialog(null, "Ολοκληρώθηκε η εισαγωγή τιμών στον πίνακα Genre!", "ΠΛΗΡΟΦΟΡΙΑ", JOptionPane.WARNING_MESSAGE);
+            } catch (Exception ex) {
+                getDataLogTextArea.append(ex.getMessage() + "\n\n");
+                Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            try {
+                JOptionPane.showMessageDialog(null, "Ξεκινάει η εισαγωγή ταινιών!", "ΠΛΗΡΟΦΟΡΙΑ", JOptionPane.WARNING_MESSAGE);
+                importData.fillMovieTable();
+                getDataLogTextArea.append("Ολοκληρώθηκε η εισαγωγή τιμών στον πίνακα Movie!" + "\n\n");
+            } catch (Exception ex) {
+                getDataLogTextArea.append(ex.getMessage() + "\n\n");
+                Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            JOptionPane.showMessageDialog(null, " Η ανάκτηση των δεδομένων ολοκληρώθηκε!", "ΠΛΗΡΟΦΟΡΙΑ", JOptionPane.WARNING_MESSAGE);
+        }
+    }//GEN-LAST:event_getLabelMouseClicked
+
+    public void updateFavouritesList() {
+        List<FavoriteList> favoriteList = this.favoriteListJpaController.findFavoriteListEntities();
+        DefaultListModel lm = new DefaultListModel<>();
+        favoriteList.forEach(fv -> lm.addElement(fv.getName()));
+        allFavoritesList.setModel(lm);
+    }
+
+    private void attachSearchTableListener() {
         searchResultTable.getSelectionModel().addListSelectionListener((ListSelectionEvent event) -> {
             if (searchResultTable.getSelectedRow() > -1) {
                 int items = addToListComboBox.getItemCount();
@@ -1096,114 +1215,7 @@ public class Menu extends javax.swing.JFrame {
                 }
             }
         });
-
-        addToListComboBox.addItemListener((ItemEvent e) -> {
-            try {
-
-                String selectedList = addToListComboBox.getSelectedItem().toString();
-                int movieId = Integer.parseInt(searchResultTable.getValueAt(searchResultTable.getSelectedRow(), 4).toString());
-
-                Movie selectedMovie = movieJpaController.findMovie(movieId);
-                FavoriteList favoriteList = favoriteListJpaController.findFavoriteListEntities().stream().filter(
-                        fl -> (fl.getName() == null ? selectedList == null : fl.getName().equals(selectedList))
-                ).findFirst().get();
-
-                selectedMovie.setFavoriteListId(favoriteList);
-
-                movieJpaController.edit(selectedMovie);
-
-                searchResultTable.setValueAt(favoriteList.getName(), searchResultTable.getSelectedRow(), 3);
-
-            } catch (Exception ex) {
-                Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        });
-
-
-    }//GEN-LAST:event_searchMoviesButtonActionPerformed
-
-    private void clearΙnputsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearΙnputsButtonActionPerformed
-        GenreSearchComboBox.removeAllItems();
-        GenreSearchComboBox.addItem("Είδος");
-        GenreSearchComboBox.addItem("Action");
-        GenreSearchComboBox.addItem("Romance");
-        GenreSearchComboBox.addItem("Science Fiction");
-        GenreSearchComboBox.setSelectedIndex(0);
-
-        YearSearchTextField.setText("Έτος");
-
-        DefaultTableModel defTableModel = new DefaultTableModel();
-
-        searchResultTable.setModel(defTableModel);
-    }//GEN-LAST:event_clearΙnputsButtonActionPerformed
-
-    private void bestMoviesButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bestMoviesButton1ActionPerformed
-        // αφορά το button που επιστρέφει τις δέκα (10) καλύτερες βάση βαθμολογίας ταινίες//
-
-        List<Movie> topMovies = this.movieJpaController.findMovieEntities();
-        Collections.sort(topMovies, Collections.reverseOrder(Comparator.comparing(Movie::getRating)));
-        List<Movie> topTenMovies = topMovies.subList(0, 10);
-
-        //bestMoviesModel
-        DefaultTableModel bestMoviesModel = new DefaultTableModel();
-        bestMoviesModel.setColumnIdentifiers(new String[]{"Τίτλος ταινίας", "Βαθμολογία"});
-
-        //for loop στην λίστα και πρόσθεση των ταινιών στο model μου
-        topTenMovies.forEach(movie
-                -> bestMoviesModel.addRow(
-                        new String[]{movie.getTitle(), Float.toString(movie.getRating())}
-                )
-        );
-        //εμφάνιση του ΤΑΒLE 
-        statsTable1.setModel(bestMoviesModel);
-
-    }//GEN-LAST:event_bestMoviesButton1ActionPerformed
-
-    private void bestMoviesButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bestMoviesButton2ActionPerformed
-
-        //  αφορά το button που επιστρέφει τις καλύτερες ταινίες ανα λίστα//
-        // κάνω select όλες τις ταινίες οι οποίες ανήκουν σε favorite list, τις ταξινομώ κατά βαθμολογία και τις εισάγω σε λίστα
-        Query queryMovies = entityManager.createQuery("SELECT m FROM Movie m WHERE m.favoriteListId IS NOT NULL ORDER BY m.rating DESC");
-        List<Movie> movies = queryMovies.getResultList();
-
-        // κάνω select όλες τις favorite list και τις εισάγω σε λίστα
-        Query queryMovies2 = entityManager.createQuery("SELECT f FROM FavoriteList f");
-        List<FavoriteList> favoriteList = queryMovies2.getResultList();
-
-        // bestMoviesModel2
-        DefaultTableModel bestMoviesModel2 = new DefaultTableModel();
-        bestMoviesModel2.setColumnIdentifiers(new String[]{"Λίστα αγαπημένων", "Τίτλος ταινίας"});
-
-        /* επειδή η λίστα των ταινιών είναι ήδη ταξινομημένη κατα βαθμολογία 
-           θα κάνω iterate την λίστα των ταινιών θα επιλέγω την πρώτη ταινιά
-           ανά favoriteListId (η οποία θα είναι σίγουρα και αυτή με τη μεγαλύτερη
-           βαθμολογία λόγω της ταξινομησής μασ
-         */
-        //for loop για το favoriteListId
-        for (int i = 1; i < favoriteList.size() + 1; i++) {
-
-            //for loop για τις ταινίες  
-            for (Movie movie : movies) {
-                //Βρίσκω τις ταινίες με την υψηλότερη βαθμολογία από κάθε λίστα αγαπημένων
-
-                //απο ΙΝΤΕGER->int//
-                int x = movie.getFavoriteListId().getId();
-
-                if (x == i) {
-
-                    //αποηκεύω όνομα λίστας αγαπημένων
-                    String favoriteListName = movie.getFavoriteListId().getName();
-                    // εμφανίζω το table πρώτη στήλη το όνομα της favorite list και δεύτερη το όνομα της ταινιας)
-                    bestMoviesModel2.addRow(new String[]{favoriteListName, movie.getTitle()});
-                    break;
-                }
-            }
-        }
-        //Ενημερώνω τo jTable2 & Κρύβω την στήλη Βαθμολογία
-        statsTable1.setModel(bestMoviesModel2);
-
-
-    }//GEN-LAST:event_bestMoviesButton2ActionPerformed
+    }
 
     /**
      * @param args the command line arguments
@@ -1235,7 +1247,11 @@ public class Menu extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Menu().setVisible(true);
+                try {
+                    new Menu().setVisible(true);
+                } catch (IOException ex) {
+                    Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }
@@ -1256,8 +1272,8 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JPanel aboutTabPanel;
     private javax.swing.JComboBox<String> addToListComboBox;
     private javax.swing.JList<String> allFavoritesList;
-    private javax.swing.JButton bestMoviesButton1;
-    private javax.swing.JButton bestMoviesButton2;
+    private javax.swing.JButton bestMoviePerListButton;
+    private javax.swing.JScrollPane bestMoviesScrollPane;
     private javax.swing.JPanel bgPanel;
     private javax.swing.JPanel cardPanel;
     private javax.swing.JButton clearΙnputsButton;
@@ -1288,7 +1304,6 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
-    private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
@@ -1301,6 +1316,7 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JLabel statsLabel;
     private javax.swing.JPanel statsTabPanel;
     private javax.swing.JTable statsTable1;
+    private javax.swing.JButton top10MoviesButton;
     private javax.swing.JPanel topPanel;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
