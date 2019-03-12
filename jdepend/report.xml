@@ -1,0 +1,266 @@
+<?xml version="1.0"?>
+<JDepend>
+    <Packages>
+
+        <Package name="java.awt">
+            <error>No stats available: package referenced, but not analyzed.</error>
+        </Package>
+
+        <Package name="java.awt.event">
+            <error>No stats available: package referenced, but not analyzed.</error>
+        </Package>
+
+        <Package name="java.beans">
+            <error>No stats available: package referenced, but not analyzed.</error>
+        </Package>
+
+        <Package name="java.io">
+            <error>No stats available: package referenced, but not analyzed.</error>
+        </Package>
+
+        <Package name="java.lang">
+            <error>No stats available: package referenced, but not analyzed.</error>
+        </Package>
+
+        <Package name="java.math">
+            <error>No stats available: package referenced, but not analyzed.</error>
+        </Package>
+
+        <Package name="java.net">
+            <error>No stats available: package referenced, but not analyzed.</error>
+        </Package>
+
+        <Package name="java.text">
+            <error>No stats available: package referenced, but not analyzed.</error>
+        </Package>
+
+        <Package name="java.util">
+            <error>No stats available: package referenced, but not analyzed.</error>
+        </Package>
+
+        <Package name="java.util.logging">
+            <error>No stats available: package referenced, but not analyzed.</error>
+        </Package>
+
+        <Package name="javax.json">
+            <error>No stats available: package referenced, but not analyzed.</error>
+        </Package>
+
+        <Package name="javax.persistence">
+            <error>No stats available: package referenced, but not analyzed.</error>
+        </Package>
+
+        <Package name="javax.persistence.criteria">
+            <error>No stats available: package referenced, but not analyzed.</error>
+        </Package>
+
+        <Package name="javax.persistence.metamodel">
+            <error>No stats available: package referenced, but not analyzed.</error>
+        </Package>
+
+        <Package name="javax.swing">
+            <error>No stats available: package referenced, but not analyzed.</error>
+        </Package>
+
+        <Package name="javax.swing.event">
+            <error>No stats available: package referenced, but not analyzed.</error>
+        </Package>
+
+        <Package name="javax.swing.table">
+            <error>No stats available: package referenced, but not analyzed.</error>
+        </Package>
+
+        <Package name="myMovies">
+            <Stats>
+                <TotalClasses>36</TotalClasses>
+                <ConcreteClasses>36</ConcreteClasses>
+                <AbstractClasses>0</AbstractClasses>
+                <Ca>0</Ca>
+                <Ce>18</Ce>
+                <A>0</A>
+                <I>1</I>
+                <D>0</D>
+                <V>1</V>
+            </Stats>
+
+            <AbstractClasses>
+            </AbstractClasses>
+
+            <ConcreteClasses>
+                <Class sourceFile="EditFavouriteListJDialog.java">
+                    myMovies.EditFavouriteListJDialog$1
+                </Class>
+                <Class sourceFile="EditFavouriteListJDialog.java">
+                    myMovies.EditFavouriteListJDialog$2
+                </Class>
+                <Class sourceFile="EditFavouriteListJDialog.java">
+                    myMovies.EditFavouriteListJDialog$3
+                </Class>
+                <Class sourceFile="EditFavouriteListJDialog.java">
+                    myMovies.EditFavouriteListJDialog$3$1
+                </Class>
+                <Class sourceFile="ExtractedData.java">
+                    myMovies.ExtractedData
+                </Class>
+                <Class sourceFile="FavoriteList.java">
+                    myMovies.FavoriteList
+                </Class>
+                <Class sourceFile="FavoriteListJpaController.java">
+                    myMovies.FavoriteListJpaController
+                </Class>
+                <Class sourceFile="FavoriteList_.java">
+                    myMovies.FavoriteList_
+                </Class>
+                <Class sourceFile="Genre.java">
+                    myMovies.Genre
+                </Class>
+                <Class sourceFile="GenreJpaController.java">
+                    myMovies.GenreJpaController
+                </Class>
+                <Class sourceFile="Genre_.java">
+                    myMovies.Genre_
+                </Class>
+                <Class sourceFile="ImagePanel.java">
+                    myMovies.ImagePanel
+                </Class>
+                <Class sourceFile="Menu.java">
+                    myMovies.Menu$1
+                </Class>
+                <Class sourceFile="Menu.java">
+                    myMovies.Menu$10
+                </Class>
+                <Class sourceFile="Menu.java">
+                    myMovies.Menu$11
+                </Class>
+                <Class sourceFile="Menu.java">
+                    myMovies.Menu$12
+                </Class>
+                <Class sourceFile="Menu.java">
+                    myMovies.Menu$13
+                </Class>
+                <Class sourceFile="Menu.java">
+                    myMovies.Menu$14
+                </Class>
+                <Class sourceFile="Menu.java">
+                    myMovies.Menu$15
+                </Class>
+                <Class sourceFile="Menu.java">
+                    myMovies.Menu$16
+                </Class>
+                <Class sourceFile="Menu.java">
+                    myMovies.Menu$17
+                </Class>
+                <Class sourceFile="Menu.java">
+                    myMovies.Menu$2
+                </Class>
+                <Class sourceFile="Menu.java">
+                    myMovies.Menu$3
+                </Class>
+                <Class sourceFile="Menu.java">
+                    myMovies.Menu$4
+                </Class>
+                <Class sourceFile="Menu.java">
+                    myMovies.Menu$5
+                </Class>
+                <Class sourceFile="Menu.java">
+                    myMovies.Menu$6
+                </Class>
+                <Class sourceFile="Menu.java">
+                    myMovies.Menu$7
+                </Class>
+                <Class sourceFile="Menu.java">
+                    myMovies.Menu$8
+                </Class>
+                <Class sourceFile="Menu.java">
+                    myMovies.Menu$9
+                </Class>
+                <Class sourceFile="Movie.java">
+                    myMovies.Movie
+                </Class>
+                <Class sourceFile="MovieJpaController.java">
+                    myMovies.MovieJpaController
+                </Class>
+                <Class sourceFile="Movie_.java">
+                    myMovies.Movie_
+                </Class>
+                <Class sourceFile="NewFavouriteListJDialog.java">
+                    myMovies.NewFavouriteListJDialog$1
+                </Class>
+                <Class sourceFile="NewFavouriteListJDialog.java">
+                    myMovies.NewFavouriteListJDialog$2
+                </Class>
+                <Class sourceFile="NewFavouriteListJDialog.java">
+                    myMovies.NewFavouriteListJDialog$3
+                </Class>
+                <Class sourceFile="NewFavouriteListJDialog.java">
+                    myMovies.NewFavouriteListJDialog$3$1
+                </Class>
+            </ConcreteClasses>
+
+            <DependsUpon>
+                <Package>java.awt</Package>
+                <Package>java.awt.event</Package>
+                <Package>java.beans</Package>
+                <Package>java.io</Package>
+                <Package>java.lang</Package>
+                <Package>java.math</Package>
+                <Package>java.net</Package>
+                <Package>java.text</Package>
+                <Package>java.util</Package>
+                <Package>java.util.logging</Package>
+                <Package>javax.json</Package>
+                <Package>javax.persistence</Package>
+                <Package>javax.persistence.criteria</Package>
+                <Package>javax.persistence.metamodel</Package>
+                <Package>javax.swing</Package>
+                <Package>javax.swing.event</Package>
+                <Package>javax.swing.table</Package>
+                <Package>myMovies.exceptions</Package>
+            </DependsUpon>
+
+            <UsedBy>
+            </UsedBy>
+        </Package>
+
+        <Package name="myMovies.exceptions">
+            <Stats>
+                <TotalClasses>3</TotalClasses>
+                <ConcreteClasses>3</ConcreteClasses>
+                <AbstractClasses>0</AbstractClasses>
+                <Ca>1</Ca>
+                <Ce>2</Ce>
+                <A>0</A>
+                <I>0.67</I>
+                <D>0.33</D>
+                <V>1</V>
+            </Stats>
+
+            <AbstractClasses>
+            </AbstractClasses>
+
+            <ConcreteClasses>
+                <Class sourceFile="IllegalOrphanException.java">
+                    myMovies.exceptions.IllegalOrphanException
+                </Class>
+                <Class sourceFile="NonexistentEntityException.java">
+                    myMovies.exceptions.NonexistentEntityException
+                </Class>
+                <Class sourceFile="PreexistingEntityException.java">
+                    myMovies.exceptions.PreexistingEntityException
+                </Class>
+            </ConcreteClasses>
+
+            <DependsUpon>
+                <Package>java.lang</Package>
+                <Package>java.util</Package>
+            </DependsUpon>
+
+            <UsedBy>
+                <Package>myMovies</Package>
+            </UsedBy>
+        </Package>
+    </Packages>
+
+    <Cycles>
+    </Cycles>
+</JDepend>

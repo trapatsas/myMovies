@@ -1,0 +1,147 @@
+
+digraph g {
+        graph [
+	    rankdir = "LR"
+	];
+	node [
+	    fontsize = "12"
+	    fontname = "Courier"
+	    shape = "ellipse"
+	];
+	edge[];
+	"java.awt" [
+        label="java.awt | Total Classes: "
+	shape="record"
+	color=".99 0.0 .9"
+	style=filled
+    ];
+    "java.awt.event" [
+        label="java.awt.event | Total Classes: "
+	shape="record"
+	color=".99 0.0 .9"
+	style=filled
+    ];
+    "java.beans" [
+        label="java.beans | Total Classes: "
+	shape="record"
+	color=".99 0.0 .9"
+	style=filled
+    ];
+    "java.io" [
+        label="java.io | Total Classes: "
+	shape="record"
+	color=".99 0.0 .9"
+	style=filled
+    ];
+    "java.lang" [
+        label="java.lang | Total Classes: "
+	shape="record"
+	color=".99 0.0 .9"
+	style=filled
+    ];
+    "java.math" [
+        label="java.math | Total Classes: "
+	shape="record"
+	color=".99 0.0 .9"
+	style=filled
+    ];
+    "java.net" [
+        label="java.net | Total Classes: "
+	shape="record"
+	color=".99 0.0 .9"
+	style=filled
+    ];
+    "java.text" [
+        label="java.text | Total Classes: "
+	shape="record"
+	color=".99 0.0 .9"
+	style=filled
+    ];
+    "java.util" [
+        label="java.util | Total Classes: "
+	shape="record"
+	color=".99 0.0 .9"
+	style=filled
+    ];
+    "java.util.logging" [
+        label="java.util.logging | Total Classes: "
+	shape="record"
+	color=".99 0.0 .9"
+	style=filled
+    ];
+    "javax.json" [
+        label="javax.json | Total Classes: "
+	shape="record"
+	color=".99 0.0 .9"
+	style=filled
+    ];
+    "javax.persistence" [
+        label="javax.persistence | Total Classes: "
+	shape="record"
+	color=".99 0.0 .9"
+	style=filled
+    ];
+    "javax.persistence.criteria" [
+        label="javax.persistence.criteria | Total Classes: "
+	shape="record"
+	color=".99 0.0 .9"
+	style=filled
+    ];
+    "javax.persistence.metamodel" [
+        label="javax.persistence.metamodel | Total Classes: "
+	shape="record"
+	color=".99 0.0 .9"
+	style=filled
+    ];
+    "javax.swing" [
+        label="javax.swing | Total Classes: "
+	shape="record"
+	color=".99 0.0 .9"
+	style=filled
+    ];
+    "javax.swing.event" [
+        label="javax.swing.event | Total Classes: "
+	shape="record"
+	color=".99 0.0 .9"
+	style=filled
+    ];
+    "javax.swing.table" [
+        label="javax.swing.table | Total Classes: "
+	shape="record"
+	color=".99 0.0 .9"
+	style=filled
+    ];
+    "myMovies" [
+        label="myMovies | Total Classes: 36"
+	shape="record"
+	color=".99 0 .9"
+	style=filled
+    ];
+    "myMovies" -> "java.awt"
+    "myMovies" -> "java.awt.event"
+    "myMovies" -> "java.beans"
+    "myMovies" -> "java.io"
+    "myMovies" -> "java.lang"
+    "myMovies" -> "java.math"
+    "myMovies" -> "java.net"
+    "myMovies" -> "java.text"
+    "myMovies" -> "java.util"
+    "myMovies" -> "java.util.logging"
+    "myMovies" -> "javax.json"
+    "myMovies" -> "javax.persistence"
+    "myMovies" -> "javax.persistence.criteria"
+    "myMovies" -> "javax.persistence.metamodel"
+    "myMovies" -> "javax.swing"
+    "myMovies" -> "javax.swing.event"
+    "myMovies" -> "javax.swing.table"
+    "myMovies" -> "myMovies.exceptions"
+    "myMovies.exceptions" [
+        label="myMovies.exceptions | Total Classes: 3"
+	shape="record"
+	color=".99 0.33 .9"
+	style=filled
+    ];
+    "myMovies.exceptions" -> "java.lang"
+    "myMovies.exceptions" -> "java.util"
+    
+}

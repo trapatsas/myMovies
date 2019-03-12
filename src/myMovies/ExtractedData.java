@@ -24,7 +24,8 @@ public class ExtractedData {
     private final ArrayList<Integer> allowedGenreIds;
     GenreJpaController genreController = new GenreJpaController(emf);
     MovieJpaController movieController = new MovieJpaController(emf);
-    private JTextArea logArea;
+    private final JTextArea logArea;
+    private final int totalPagesPerGenre = 13;
 
     public ExtractedData(JTextArea jTextArea) {
         this.logArea = jTextArea;
@@ -68,9 +69,6 @@ public class ExtractedData {
             int current_page = 1;
             int total_pages;
 
-            JOptionPane.showMessageDialog(null, "Ανάκτηση αποτελεσμάτων από το είδος με κωδικό "
-                    + gId, "ΠΛΗΡΟΦΟΡΙΑ", JOptionPane.WARNING_MESSAGE);
-
             do {
                 this.logArea.append("\nΑνάκτηση αποτελεσμάτων από τη σελίδα " + current_page + "... \n");
                 JsonObject nextPageResults = discoverMoviesQueryStringBuilder(current_page, gId, key);
@@ -79,8 +77,11 @@ public class ExtractedData {
                 JsonArray nextPageMovieResults = nextPageResults.getJsonArray("results");
                 saveMovieResults(nextPageMovieResults, logArea);
                 current_page++;
-            } while (current_page < Math.min(total_pages, 37));
-            Thread.sleep(11000);
+            } while (current_page < Math.min(total_pages, this.totalPagesPerGenre));
+            // Εφαρμόζουμε throttling. Σε περίπτωση που οι κλήσεις αθροίζουν πάνω από 40 περιμένουμε 10 δευτ. και μετά συνεχίζουμε.
+            if (totalPagesPerGenre > 13) {
+                Thread.sleep(10100);
+            }
 
         }
     }

@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>myMovies</OriginalElement>
+  <nodes>
+    <node x="374.36535030678954" y="0.0">myMovies.FavoriteList</node>
+    <node x="645.2820169734562" y="248.0">myMovies.MovieJpaController</node>
+    <node x="769.0521333533416" y="337.0">myMovies.ExtractedData</node>
+    <node x="142.82352941176475" y="337.0">myMovies.NewFavouriteListJDialog</node>
+    <node x="728.700788648793" y="119.0">myMovies.Movie</node>
+    <node x="361.82352941176475" y="337.0">myMovies.EditFavouriteListJDialog</node>
+    <node x="0.0" y="550.0">myMovies.images</node>
+    <node x="898.9777285914367" y="248.0">myMovies.GenreJpaController</node>
+    <node x="518.1360294117648" y="119.0">myMovies.exceptions</node>
+    <node x="345.0" y="550.0">myMovies.Genre_</node>
+    <node x="175.0" y="550.0">myMovies.FavoriteList_</node>
+    <node x="554.2056906095773" y="476.0">myMovies.Menu</node>
+    <node x="481.0" y="550.0">myMovies.Movie_</node>
+    <node x="0.0" y="337.0">myMovies.ImagePanel</node>
+    <node x="422.2820169734561" y="248.0">myMovies.FavoriteListJpaController</node>
+    <node x="776.1603307989865" y="0.0">myMovies.Genre</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="myMovies.Movie" target="myMovies.Genre">
+      <point x="5.25" y="-14.5" />
+      <point x="775.950788648793" y="69.0" />
+      <point x="782.231759370415" y="69.0" />
+      <point x="-36.428571428571445" y="14.5" />
+    </edge>
+    <edge source="myMovies.Menu" target="myMovies.ImagePanel">
+      <point x="-33.76470588235304" y="-14.5" />
+      <point x="561.4409847272243" y="446.0" />
+      <point x="87.75" y="446.0" />
+      <point x="29.25" y="14.5" />
+    </edge>
+    <edge source="myMovies.GenreJpaController" target="myMovies.Movie">
+      <point x="0.0" y="-14.5" />
+      <point x="982.9777285914367" y="178.0" />
+      <point x="805.700788648793" y="178.0" />
+      <point x="35.0" y="14.5" />
+    </edge>
+    <edge source="myMovies.MovieJpaController" target="myMovies.exceptions">
+      <point x="-62.625" y="-14.5" />
+      <point x="666.1570169734562" y="198.0" />
+      <point x="595.1360294117648" y="198.0" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="myMovies.ExtractedData" target="myMovies.Movie">
+      <point x="-19.285714285714334" y="-14.5" />
+      <point x="817.2664190676272" y="317.0" />
+      <point x="822.7820169734562" y="317.0" />
+      <point x="822.7820169734562" y="218.0" />
+      <point x="777.700788648793" y="218.0" />
+      <point x="7.0" y="14.5" />
+    </edge>
+    <edge source="myMovies.GenreJpaController" target="myMovies.exceptions">
+      <point x="-56.0" y="-14.5" />
+      <point x="926.9777285914367" y="188.0" />
+      <point x="646.4693627450981" y="188.0" />
+      <point x="51.33333333333337" y="14.5" />
+    </edge>
+    <edge source="myMovies.FavoriteList" target="myMovies.Movie">
+      <point x="54.54166666666663" y="14.5" />
+      <point x="488.40701697345617" y="49.0" />
+      <point x="765.450788648793" y="49.0" />
+      <point x="-5.25" y="-14.5" />
+    </edge>
+    <edge source="myMovies.Genre" target="myMovies.Movie">
+      <point x="0.0" y="14.5" />
+      <point x="818.6603307989865" y="99.0" />
+      <point x="807.450788648793" y="99.0" />
+      <point x="36.75000000000003" y="-14.5" />
+    </edge>
+    <edge source="myMovies.Menu" target="myMovies.FavoriteList">
+      <point x="-28.94117647058829" y="-14.5" />
+      <point x="566.2645141389891" y="436.0" />
+      <point x="127.5" y="436.0" />
+      <point x="127.5" y="49.0" />
+      <point x="379.3236836401228" y="49.0" />
+      <point x="-54.541666666666686" y="14.5" />
+    </edge>
+    <edge source="myMovies.Menu" target="myMovies.Movie">
+      <point x="9.647058823529392" y="-14.5" />
+      <point x="604.8527494331067" y="396.0" />
+      <point x="634.7820169734562" y="396.0" />
+      <point x="634.7820169734562" y="218.0" />
+      <point x="749.700788648793" y="218.0" />
+      <point x="-21.0" y="14.5" />
+    </edge>
+    <edge source="myMovies.Menu" target="myMovies.ExtractedData">
+      <point x="28.941176470588175" y="-14.5" />
+      <point x="624.1468670801655" y="436.0" />
+      <point x="870.3021333533416" y="436.0" />
+      <point x="33.75" y="14.5" />
+    </edge>
+    <edge source="myMovies.Menu" target="myMovies.MovieJpaController">
+      <point x="14.470588235294144" y="-14.5" />
+      <point x="609.6762788448715" y="406.0" />
+      <point x="695.8382311257838" y="406.0" />
+      <point x="695.8382311257838" y="317.0" />
+      <point x="666.1570169734562" y="317.0" />
+      <point x="-62.625" y="14.5" />
+    </edge>
+    <edge source="myMovies.EditFavouriteListJDialog" target="myMovies.FavoriteList">
+      <point x="-73.5" y="-14.5" />
+      <point x="386.32352941176475" y="297.0" />
+      <point x="393.5367605375484" y="297.0" />
+      <point x="393.5367605375484" y="89.0" />
+      <point x="418.99035030678954" y="89.0" />
+      <point x="-14.875" y="14.5" />
+    </edge>
+    <edge source="myMovies.NewFavouriteListJDialog" target="myMovies.FavoriteListJpaController">
+      <point x="74.625" y="-14.5" />
+      <point x="316.94852941176475" y="317.0" />
+      <point x="472.7820169734561" y="317.0" />
+      <point x="-50.5" y="14.5" />
+    </edge>
+    <edge source="myMovies.FavoriteListJpaController" target="myMovies.FavoriteList">
+      <point x="-67.33333333333326" y="-14.5" />
+      <point x="455.94868364012285" y="99.0" />
+      <point x="438.8236836401228" y="99.0" />
+      <point x="4.958333333333314" y="14.5" />
+    </edge>
+    <edge source="myMovies.ExtractedData" target="myMovies.MovieJpaController">
+      <point x="-38.57142857142861" y="-14.5" />
+      <point x="797.9807047819129" y="317.0" />
+      <point x="791.4070169734562" y="317.0" />
+      <point x="62.625" y="14.5" />
+    </edge>
+    <edge source="myMovies.NewFavouriteListJDialog" target="myMovies.FavoriteList">
+      <point x="-74.625" y="-14.5" />
+      <point x="167.69852941176475" y="317.0" />
+      <point x="181.15927621048434" y="317.0" />
+      <point x="181.15927621048434" y="69.0" />
+      <point x="399.15701697345617" y="69.0" />
+      <point x="-34.708333333333314" y="14.5" />
+    </edge>
+    <edge source="myMovies.FavoriteListJpaController" target="myMovies.Movie">
+      <point x="67.33333333333337" y="-14.5" />
+      <point x="590.6153503067894" y="208.0" />
+      <point x="735.700788648793" y="208.0" />
+      <point x="-35.0" y="14.5" />
+    </edge>
+    <edge source="myMovies.ExtractedData" target="myMovies.Genre">
+      <point x="19.285714285714278" y="-14.5" />
+      <point x="855.8378476390558" y="297.0" />
+      <point x="888.4777285914367" y="297.0" />
+      <point x="888.4777285914367" y="99.0" />
+      <point x="842.9460450847007" y="99.0" />
+      <point x="24.285714285714278" y="14.5" />
+    </edge>
+    <edge source="myMovies.MovieJpaController" target="myMovies.FavoriteList">
+      <point x="-20.875" y="-14.5" />
+      <point x="707.9070169734562" y="198.0" />
+      <point x="692.013288648793" y="198.0" />
+      <point x="692.013288648793" y="89.0" />
+      <point x="448.74035030678954" y="89.0" />
+      <point x="14.875" y="14.5" />
+    </edge>
+    <edge source="myMovies.EditFavouriteListJDialog" target="myMovies.FavoriteListJpaController">
+      <point x="73.5" y="-14.5" />
+      <point x="533.3235294117648" y="317.0" />
+      <point x="540.1153503067894" y="317.0" />
+      <point x="16.83333333333337" y="14.5" />
+    </edge>
+    <edge source="myMovies.GenreJpaController" target="myMovies.Genre">
+      <point x="56.0" y="-14.5" />
+      <point x="1038.9777285914367" y="168.0" />
+      <point x="963.3235294117648" y="168.0" />
+      <point x="963.3235294117648" y="89.0" />
+      <point x="855.0889022275579" y="89.0" />
+      <point x="36.428571428571445" y="14.5" />
+    </edge>
+    <edge source="myMovies.ExtractedData" target="myMovies.GenreJpaController">
+      <point x="57.85714285714283" y="-14.5" />
+      <point x="894.4092762104844" y="317.0" />
+      <point x="961.9777285914367" y="317.0" />
+      <point x="-21.0" y="14.5" />
+    </edge>
+    <edge source="myMovies.MovieJpaController" target="myMovies.Movie">
+      <point x="20.875" y="-14.5" />
+      <point x="749.6570169734562" y="228.0" />
+      <point x="763.700788648793" y="228.0" />
+      <point x="-7.0" y="14.5" />
+    </edge>
+    <edge source="myMovies.Menu" target="myMovies.FavoriteListJpaController">
+      <point x="4.823529411764753" y="-14.5" />
+      <point x="600.0292200213421" y="317.0" />
+      <point x="607.4486836401227" y="317.0" />
+      <point x="84.16666666666663" y="14.5" />
+    </edge>
+    <edge source="myMovies.Menu" target="myMovies.NewFavouriteListJDialog">
+      <point x="-19.294117647058897" y="-14.5" />
+      <point x="575.9115729625184" y="416.0" />
+      <point x="192.57352941176475" y="416.0" />
+      <point x="-49.75" y="14.5" />
+    </edge>
+    <edge source="myMovies.Menu" target="myMovies.EditFavouriteListJDialog">
+      <point x="-9.647058823529392" y="-14.5" />
+      <point x="585.558631786048" y="396.0" />
+      <point x="410.82352941176475" y="396.0" />
+      <point x="-49.0" y="14.5" />
+    </edge>
+    <edge source="myMovies.Menu" target="myMovies.GenreJpaController">
+      <point x="33.76470588235293" y="-14.5" />
+      <point x="628.9703964919303" y="446.0" />
+      <point x="1021.1960450847007" y="446.0" />
+      <point x="1021.1960450847007" y="317.0" />
+      <point x="1003.9777285914367" y="317.0" />
+      <point x="21.0" y="14.5" />
+    </edge>
+    <edge source="myMovies.Movie" target="myMovies.FavoriteList">
+      <point x="-26.25" y="-14.5" />
+      <point x="744.450788648793" y="69.0" />
+      <point x="468.5736836401228" y="69.0" />
+      <point x="34.70833333333326" y="14.5" />
+    </edge>
+    <edge source="myMovies.FavoriteListJpaController" target="myMovies.exceptions">
+      <point x="0.0" y="-14.5" />
+      <point x="523.2820169734562" y="228.0" />
+      <point x="543.8026960784314" y="228.0" />
+      <point x="-51.333333333333314" y="14.5" />
+    </edge>
+    <edge source="myMovies.MovieJpaController" target="myMovies.Genre">
+      <point x="62.625" y="-14.5" />
+      <point x="791.4070169734562" y="228.0" />
+      <point x="831.9460450847007" y="228.0" />
+      <point x="831.9460450847007" y="99.0" />
+      <point x="830.8031879418436" y="99.0" />
+      <point x="12.142857142857167" y="14.5" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="1.4000000000000004" x="532.0" y="324.0" />
+  <SelectedNodes />
+  <Categories />
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+
